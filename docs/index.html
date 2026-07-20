@@ -1,0 +1,2276 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aste Tribunale di Genova</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background: #f4f5f7;
+        margin: 0;
+        padding: 0;
+        color: #1a1a1a;
+    }
+    header {
+        background: #0b3d66;
+        color: white;
+        padding: 24px 20px;
+        text-align: center;
+    }
+    header h1 { margin: 0 0 6px 0; font-size: 1.5rem; }
+    header p { margin: 0; opacity: 0.85; font-size: 0.9rem; }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .banner-nuovi {
+        background: #e6f4ea;
+        border: 1px solid #34a853;
+        color: #1e7e34;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
+    .stats {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    .stat-box {
+        background: white;
+        border-radius: 8px;
+        padding: 12px 16px;
+        flex: 1;
+        min-width: 140px;
+        text-align: center;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .stat-box .num { font-size: 1.4rem; font-weight: 700; color: #0b3d66; }
+    .stat-box .label { font-size: 0.8rem; color: #666; }
+    #map {
+        height: 350px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .map-note {
+        font-size: 0.78rem;
+        color: #888;
+        margin: -14px 0 20px 4px;
+    }
+    .card {
+        background: white;
+        border-radius: 10px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .card-nuovo {
+        border-left: 4px solid #34a853;
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.05rem;
+        flex: 1;
+    }
+    .badge-nuovo {
+        background: #34a853;
+        color: white;
+        font-size: 0.7rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 10px;
+    }
+    .badge-stato {
+        font-size: 0.75rem;
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .badge-verde { background: #e6f4ea; color: #1e7e34; }
+    .badge-rossa { background: #fce8e6; color: #c5221f; }
+    .card-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0b3d66;
+        margin: 6px 0;
+    }
+    .card-location { font-size: 0.9rem; color: #444; margin-bottom: 4px; }
+    .card-meta { font-size: 0.78rem; color: #888; margin-bottom: 8px; }
+    .card-desc {
+        font-size: 0.88rem;
+        color: #333;
+        line-height: 1.4;
+        margin-bottom: 10px;
+    }
+    .card-link {
+        display: inline-block;
+        font-size: 0.85rem;
+        color: #0b3d66;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .card-link:hover { text-decoration: underline; }
+    footer {
+        text-align: center;
+        padding: 24px;
+        color: #888;
+        font-size: 0.8rem;
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>🏛️ Aste Immobiliari — Tribunale di Genova</h1>
+    <p>Aggiornato il 20/07/2026 alle 14:24</p>
+</header>
+<div class="container">
+    
+    <div class="stats">
+        <div class="stat-box">
+            <div class="num">139</div>
+            <div class="label">Annunci totali</div>
+        </div>
+        <div class="stat-box">
+            <div class="num">0</div>
+            <div class="label">Nuovi da ieri</div>
+        </div>
+    </div>
+
+    <div id="map"></div>
+    <p class="map-note">📍 38 di 139 annunci mostrati sulla mappa (gli altri non hanno un indirizzo geocodificabile).</p>
+
+    
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 139,21</div>
+            <div class="card-location">📍 Via Steneri Avegno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 74/2023 · Lotto LOTTO UNICO · Codice 4294872
+            </div>
+            <div class="card-desc">LOTTO SECONDO: Piena Proprietà di Terreno ubicato nel Comune di Avegno (GE), Via Steneri, di superficie pari a 100,00 mq, situato all'esterno del centro abitato e così identificato...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-avegno-via-steneri-l2326660-p1309897" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>LASTRICO SOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 2214,00</div>
+            <div class="card-location">📍 Via Geirato 110R Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 48 · Codice 4276597
+            </div>
+            <div class="card-desc">Lastrico Solare.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-lastrico-solare-genova-via-geirato-110r-l2313174-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3000,00</div>
+            <div class="card-location">📍 VIA SANT'AMBROGIO DI FEGINO 2B, piano S1 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 316/2025 · Lotto LOTTO UNICO · Codice 4348204
+            </div>
+            <div class="card-desc">Cantina ubicata a Genova (GE) - VIA SANT'AMBROGIO DI FEGINO 2B, piano S1</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-s-ambrogio-di-fegino-2b-piano-s1-16161-genova-ge-italia-l2323645-p1308074" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3357,00</div>
+            <div class="card-location">📍 Viale Costa dei Landò Cogorno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 70/2024 · Lotto 4 · Codice 4319331
+            </div>
+            <div class="card-desc">N. 6 terreni che costituiscono parte della sede stradale di diramazione di Viale Costa dei Landò.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-cogorno-viale-costa-dei-lando-l2329379-p1311604" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3500,00</div>
+            <div class="card-location">📍 Piazza Giovanni Martinez, 15 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 49/2025 · Lotto 1 · Codice 4353354
+            </div>
+            <div class="card-desc">Posto moto sito in Comune di GENOVA (GE) della consistenza catastale di 2 metri quadrati, facente parte dell'autorimessa segnata con il civico numero 15R (quindici Rosso) di Piazza...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323697-p1308113" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3500,00</div>
+            <div class="card-location">📍 Piazza Giovanni Martinez, 15 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 49/2025 · Lotto 3 · Codice 4353355
+            </div>
+            <div class="card-desc">Posto moto sito in Comune di GENOVA (GE) della consistenza catastale di 2 metri quadrati, facente parte dell'autorimessa segnata con il civico numero 15R (quindici Rosso) di Piazza...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323698-p1308113" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3500,00</div>
+            <div class="card-location">📍 Piazza Giovanni Martinez, 15 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 49/2025 · Lotto 2 · Codice 4353356
+            </div>
+            <div class="card-desc">Posto moto sito in Comune di GENOVA (GE) della consistenza catastale di 2 metri quadrati, facente parte dell'autorimessa segnata con il civico numero 15R (quindici Rosso) di Piazza...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323699-p1308113" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3500,00</div>
+            <div class="card-location">📍 Piazza Giovanni Martinez, 15 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 49/2025 · Lotto 4 · Codice 4353357
+            </div>
+            <div class="card-desc">Posto moto sito in Comune di GENOVA (GE) della consistenza catastale di 2 metri quadrati, facente parte dell'autorimessa segnata con il civico numero 15R (quindici Rosso) di Piazza...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323700-p1308113" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 3500,00</div>
+            <div class="card-location">📍 Piazza Giovanni Martinez, 15 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 49/2025 · Lotto 5 · Codice 4353358
+            </div>
+            <div class="card-desc">Posto moto sito in Comune di GENOVA (GE) della consistenza catastale di 2 metri quadrati, facente parte dell'autorimessa segnata con il civico numero 15R (quindici Rosso) di Piazza...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323701-p1308113" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 6831,00</div>
+            <div class="card-location">📍 Via Fereggiano, piano sottostrada , Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 127/2025 · Lotto LOTTO UNICO · Codice 4342205
+            </div>
+            <div class="card-desc">LOTTO 6 - BENE 6: 1/1 Diritto di proprietà - Magazzino ubicato a Genova (GE) – Via Fereggiano, piano sottostrada; . Locale ad uso magazzino, PRIVO DI NUMERO CIVICO avente accesso p...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-via-fereggiano-privo-di-numero-civico-p-t-16144-genova-ge-italia-l2326605-p1309867" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 8000,00</div>
+            <div class="card-location">📍 Via Crosin del Diavolo Strada Vicinale Zoagli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 93/2025 · Lotto LOTTO UNICO · Codice 4354251
+            </div>
+            <div class="card-desc">Quota 1/1 di DIRITTO DI USUFRUTTO VITALIZIO di TERRENO AGRICOLO di qualità uliveto, della superficie di 990 mq. in Comune di Zoagli (GE), Via Crosin del Diavolo Strada Vicinale, lu...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-zoagli-via-crosin-del-diavolo-16030-zoagli-ge-italia-l2326151-p1309573" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZI, BOTTEGHE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 9966,79</div>
+            <div class="card-location">📍 Via Isorelle 34 Savignone (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 33/2017 · Lotto 4 · Codice 4263429
+            </div>
+            <div class="card-desc">Comune di Savignone (GE), quota di proprietà pari al 100% di locale commerciale sito in Via Isorelle 34, composto dal locale principale, un disimpegno, un servizio igienico, con an...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-savignone-via-isorelle-34-l2314198-p1302565" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 10237,50</div>
+            <div class="card-location">📍 Via Fieschi 2 Montoggio (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 361/2025 · Lotto 1 · Codice 4353164
+            </div>
+            <div class="card-desc">Piena proprietà di negozio a Montoggio (GE) - Via Fieschi 2, al piano terra. con superficie lorda di 65 mq (netta 46,50 mq), originariamente a destinazione d'uso negozio, è stato t...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-montoggio-via-fieschi-2-l2323160-p1307791" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 10500,00</div>
+            <div class="card-location">📍 Via Sapello 37 R, 16157 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 393/2025 · Lotto 1 · Codice 4351950
+            </div>
+            <div class="card-desc">In Comune di Genova (GE), delegazione di Prà, il 100% della piena proprietà del magazzino segnato con il numero civico 37 Rosso (trentasette rosso) di Via Sapello, posto al piano t...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-via-sapello-37-r-l2319546-p1305807" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 10830,00</div>
+            <div class="card-location">📍 Via Francolano Casarza Ligure (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 70/2024 · Lotto 5 · Codice 4319332
+            </div>
+            <div class="card-desc">Posto auto scoperto posto in un piazzale distaccato dalla Via Francolano, in Comune di Casarza Ligure.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-casarza-ligure-via-francolano-l2329380-p1311604" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 11695,00</div>
+            <div class="card-location">📍 VIA FRATELLI CANEPA CIV. 48 B/A Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 520/2024 · Lotto 15 · Codice 4336793
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI MONOLOCALE AD USO ABITAZIONE A SERRA RICCO' (GE) IN VIA FRATELLI CANEPA CIV. 48B/ A AL PIANO TERRA, COMPOSTO DA UN LOCALE CON ANNESSO ANGOLO COTTURA E BAGNO. SU...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-serra-ricco-via-fratelli-canepa-civ-48-b-a-l2317162-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 11813,00</div>
+            <div class="card-location">📍 Via Dolo 2B, 16021 BARGAGLI GE, Italia Bargagli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 224/2024 · Lotto LOTTO UNICO · Codice 4326299
+            </div>
+            <div class="card-desc">-Bene N° 1 - Appartamento ubicato a Bargagli (GE) - VIA DOLO 2B, piano T-1-2 Trattasi di piccolo edificio da terra a tetto composto da PT - P1° e sottotetto.-Bene N° 2 - Terreno ub...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-bargagli-via-dolo-2a-l2321906-p1307023" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 12666,66</div>
+            <div class="card-location">📍 Via Piazze n. 21 Tribogna (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 320/2025 · Lotto LOTTO UNICO · Codice 4354236
+            </div>
+            <div class="card-desc">Piena proprietà di due terratetti adiacenti, di tre piani, allo stato di rudere in Tribogna, Via Piazze n. 21 e 23, invasi da vegetazione spontanea</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-tribogna-via-piazze-21-e-23-l2326117-p1309551" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 12800,00</div>
+            <div class="card-location">📍 Via Celesia, Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 149/2023 · Lotto LOTTO UNICO · Codice 4293901
+            </div>
+            <div class="card-desc">piena proprietà di immobile ad uso abitativo situato in Comune di Genova (GE) – Via Celesia civico n. 63, interno 4, piano secondo, composto da ingresso, angolo di cottura, una cam...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-celesia-l2326100-p1309538" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 13228,33</div>
+            <div class="card-location">📍 Via Roma, edificio C, int. 4, p. T-1-2 Borzonasca (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 657/2019 · Lotto LOTTO UNICO · Codice 4225146
+            </div>
+            <div class="card-desc">LOTTO 3 : Bene n. 11 - 1/1 Diritto di proprietà immobile sito in Borzonasca (GE), Via Roma, Edificio C, int. 1, p. T; Bene n. 12 - 1/1 Diritto di proprietà immobile sito in Borzona...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-borzonasca-via-roma-edificio-c-interni-1-2-3-4-l2327450-p1310305" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONI E ALLOGGI TIPICI DEI LUOGHI</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 14343,75</div>
+            <div class="card-location">📍 Salita Pietrafitta 7 Avegno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 95/2023 · Lotto 2 · Codice 4319054
+            </div>
+            <div class="card-desc">Lotto 2: Fabbricato ad uso residenziale sito ad Avegno (GE) – Salita Pietrafitta, civico n. 7 - accesso pedonale tramite creuza, con pav.ne in pietra mediante la quale si giunge ad...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-avegno-via-pietrafitta-7-16036-pietrafitta-ge-italia-l2327846-p1310580" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 15176,00</div>
+            <div class="card-location">📍 Frazione Fascia di Carlo 19 Torriglia (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 225/2025 · Lotto LOTTO UNICO · Codice 4346784
+            </div>
+            <div class="card-desc">Intera piena proprietà di appartamento ubicato nel Comune di Torriglia (GE), Frazione Fascia di Carlo 19,posto al piano terra di una palazzina fronte strada con accesso indipendent...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-torriglia-frazione-fascia-di-carlo-19-l2324182-p1308374" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 15470,00</div>
+            <div class="card-location">📍 Via Fieschi, 2 Montoggio (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 361/2025 · Lotto 2 · Codice 4353165
+            </div>
+            <div class="card-desc">Piena proprietà di appartamento in Montoggio (GE) Via Fieschi 2, piano 2, di sup. lorda 68mq (netta 50mq), su un unico livello, composto da ingresso, cucina con vano adiacente, due...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-montoggio-via-fieschi-2-l2323161-p1307791" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZI, BOTTEGHE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 15840,09</div>
+            <div class="card-location">📍 Via Isorelle 40 Savignone (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 33/2017 · Lotto 3 · Codice 4263428
+            </div>
+            <div class="card-desc">Comune di Savignone (GE), quota di proprietà pari al 100% di locale commerciale sito in Via Isorelle 40, composto dal locale principale, un deposito, un servizio igienico, con anne...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-savignone-via-isorelle-40-l2314197-p1302565" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>PORZIONE DI FABBRICATO IN CORSO DI COSTRUZIONE, TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 17200,00</div>
+            <div class="card-location">📍 Viale Costa dei Landò Cogorno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 70/2024 · Lotto 3 · Codice 4319330
+            </div>
+            <div class="card-desc">Porzione di terreno accessibile tramite strada privata e n. 2 terreni che costituiscono sede stradale di diramazione Viale alla Costa dei Landò.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-porzione-di-fabbricato-in-costruzione-cogorno-viale-costa-dei-lando-l2329254-p1311529" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 17645,00</div>
+            <div class="card-location">📍 Via Canevari, 130G, 16137 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 132/2023 · Lotto LOTTO UNICO · Codice 4354260
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI POSTO AUTO COPERTO UBICATO A GENOVA, VIA CANEVARI , EDIFICIO 130G - ROSSO, INT. 2, PIANO S1 (11 mq) e RELATIVA AREA URBANA (AREA DI MANOVRA) UBICATA A GENOVA, V...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-via-canevari-130g-16137-genova-ge-italia-l2326169-p1309589" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 17792,00</div>
+            <div class="card-location">📍 vico delle Carabaghe civico 36 A rosso Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 190/2025 · Lotto 1 · Codice 4351867
+            </div>
+            <div class="card-desc">Quota 1000/1000 di piena proprietà di locale deposito/magazzino di circa mq. 13,60, posto al piano strada, con altezza interna di m.3,00 circa, attualmente condotto in locazione</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-vico-delle-carabaghe-civico-36-a-rosso-l2319320-p1305666" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 18131,78</div>
+            <div class="card-location">📍 Via XXV Aprile, 16018 Mignanego GE, Italia Mignanego (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 138/2024 · Lotto LOTTO UNICO · Codice 4316391
+            </div>
+            <div class="card-desc">Appartamento sito in Mignanego (GE), Via XXV Aprile 24/6, posto al piano terzo, della sup. convenzionale complessiva di mq. 116,87.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-mignanego-via-xxv-aprile-16018-mignanego-ge-italia-l2322265-p1307276" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 18984,37</div>
+            <div class="card-location">📍 Località Chiappa, 4 Valbrevenna (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 39/2024 · Lotto LOTTO UNICO · Codice 4335237
+            </div>
+            <div class="card-desc">Piena ed intera proprietà della seguente unità immobiliare: Casa Unifamiliare con annessi cantina doppia e fienile con giardino ubicati al primo piano sottostrada; cantina posta al...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-valbrevenna-localita-chiappa-4-16010-chiappa-ge-italia-l2327647-p1310438" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 19116,00</div>
+            <div class="card-location">📍 Via Benedetto Macciò 17/2 Masone (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 288/2025 · Lotto LOTTO UNICO · Codice 4347315
+            </div>
+            <div class="card-desc">L'appartamento, posto al secondo piano, si compone di ingresso, due camere, vano adibito a cucina/soggiorno, bagno e balcone verandato. Sono annessi: locale cantina al piano terra,...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-masone-via-benedetto-maccio-17-2-loc-borgo-del-mulino-16010-masone-ge-italia-l2327081-p1310075" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO RURALE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 19558,13</div>
+            <div class="card-location">📍 Via Aimone Martini, Bargagli GE, Italia Bargagli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 24/2025 · Lotto LOTTO UNICO · Codice 4344631
+            </div>
+            <div class="card-desc">1) fabbricato indipendente ad uso abitativo sito in Comune di Bargagli (GE) in Via Aimone Martini s.n.c., con annessa area di pertinenza esclusiva e corredato da appezzamenti di te...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-rurale-bargagli-via-aimone-martini-l2326108-p1309545" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>GARAGE O AUTORIMESSA</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 22000,00</div>
+            <div class="card-location">📍 VIA ANTONIO PELLEGRINI civ. 8 p T Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 81/2020 · Lotto LOTTO UNICO · Codice 4290037
+            </div>
+            <div class="card-desc">Piena proprietà N. 02 BOX in Genova Sampierdarena, Via Antonio Pellegrini civ 8 p T: -C/6 mq 18 rc 158,97 ; -C/6 mq 17 RC 150,13 ;</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-garage-genova-via-antonio-pellegrini-civ-8-p-t-l2313982-p1302412" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 24025,50</div>
+            <div class="card-location">📍 V. Ponte di Savignone, 27 Savignone (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 331/2024 · Lotto LOTTO UNICO · Codice 4332278
+            </div>
+            <div class="card-desc">Comune di Savignone, l'alloggio oggetto di stima è di tipo economico, inserito al pianosecondo di una casa isolata di modeste dimensioni. Nei pressi dell'edificio vi è possibilità ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-savignone-v-ponte-di-savignone-27-l2326388-p1309721" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 26732,61</div>
+            <div class="card-location">📍 16032 Camogli GE, Italia Via Trea Camogli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 98/2023 · Lotto 01 · Codice 4326042
+            </div>
+            <div class="card-desc">LOTTI 1 e 2 in Comune di Camogli (GE), Via (località) Trea: a) appartamento civico 1, interno A, facente di edificio bifamiliare, posto al piano terra, composto da: cucina, ingress...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-camogli-via-trea-1-camogli-l2324413-p1308516" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 26932,50</div>
+            <div class="card-location">📍 salita Pietrafitta, 7, 16030 Pietrafitta GE, Italia Avegno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 360/2023 · Lotto LOTTO UNICO · Codice 4354102
+            </div>
+            <div class="card-desc">unità immobiliare su due livelli sovrapposti (piano seminterrato e piano primo ) collegati tra loro da una scala interna, con piccola corte pertinenziale</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-avegno-via-pietrafitta-7-16030-pietrafitta-ge-italia-l2325780-p1309314" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>GARAGE O AUTORIMESSA</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 27188,00</div>
+            <div class="card-location">📍 Via Montelungo 2 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 129/2024 · Lotto 1 · Codice 4355418
+            </div>
+            <div class="card-desc">Box posto al piano seminterrato di fabbricato composto da 3 appartamenti in Genova, Via Montelungo 2. Il box è composto da un ampio locale e due piccoli vani accessori, nonché un ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-garage-genova-via-montelungo-2-l2329507-p1311702" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 28539,19</div>
+            <div class="card-location">📍 Località Noceto, 3 Vobbia (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 28/2025 · Lotto LOTTO UNICO · Codice 4343483
+            </div>
+            <div class="card-desc">BENE N. 01Unità immobiliare ad uso residenziale di tipo economico in Comune di Vobbia (GE), località Noceto, civico n. 3 piani S2 – S3Appartamento in piano secondo sotto strada com...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-vobbia-localita-noceto-3-l2316712-p1304067" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE IN VILLINI</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 28700,00</div>
+            <div class="card-location">📍 regione santa maria di castiglione, n. snc Cassano Spinola (AL) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 7/2022 · Lotto 23677 · Codice 4312350
+            </div>
+            <div class="card-desc">Appartamento al piano primo con giardino, sito nel Comune di Cassano Spinola (AL), Localita Gavazzana, Regione Santa Maria di Castiglione n.8 - Edificio C, interno 4. Superficie co...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-villetta-cassano-spinola-regione-santa-maria-di-castiglione-n-snc-l2199242-p1233744" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>GARAGE O AUTORIMESSA</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 29000,00</div>
+            <div class="card-location">📍 Via del Roccolo Arenzano (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 243/2025 · Lotto LOTTO UNICO · Codice 4355970
+            </div>
+            <div class="card-desc">Box sito in Arenzano (GE), con accesso carrabile da Via Del Roccolo snc, posto al piano T del fabbricato civ. n. 37, identificato con il numero di interno 24</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-garage-arenzano-via-del-roccolo-l2331082-p1312614" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 29173,75</div>
+            <div class="card-location">📍 Via Ventotene, edificio 27, interno 4, piano 1. Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 343/2025 · Lotto LOTTO UNICO · Codice 4354750
+            </div>
+            <div class="card-desc">Appartamento ubicato a Genova (GE) - Via Ventotene, edificio 27, interno 4, piano 1.Identificato al Catasto Fabbricati – Sez. GEC - Fg. 4, Part. 385, Sub. 7, Zc. 1, Categoria A3 - ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-ventotene-edificio-27-interno-4-piano-1-l2327646-p1310437" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 29279,00</div>
+            <div class="card-location">📍 Via Privata Don Mario Bordo, 15, 16010 Pedemonte GE, Italia Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 520/2024 · Lotto 13 · Codice 4336800
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI LOCALE A SERRA RICCO' (GE) IN VIA PRIVATA DON MARIO BORDO 15 AL PIANO TERRA LEGITTIMATO URBANISTICAMENTE COME UFFICIO (ACCATASTATO COME ABITAZIONE CAT. A/3), C...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-serra-ricco-via-privata-don-mario-bordo-15-16010-pedemonte-ge-italia-l2317166-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 30090,00</div>
+            <div class="card-location">📍 Via Roma n. 26 Maissana (SP) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 4/2026 · Lotto LOTTO UNICO · Codice 4354244
+            </div>
+            <div class="card-desc">Appartamento, sup netta 83,51 mq.: accesso da terrazzo, abitabile per circa 32,80 mq., ingresso in veranda che distribuisce alla cucina, a ripostiglio e disimpegno che dà poi acces...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-maissana-via-roma-n-26-l2326138-p1309563" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 31267,55</div>
+            <div class="card-location">📍 16032 Camogli GE, Italia Via Trea 1 Camogli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 98/2023 · Lotto 02 · Codice 4326043
+            </div>
+            <div class="card-desc">In Comune di Camogli (GE), Via (località) Trea, civico 1, interno B, appartamento facente di edificio bifamiliare, posto al piano primo, composto da: ingresso, cucina, tre camere, ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-camogli-16032-camogli-ge-italia-via-trea-1-l2324414-p1308516" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 31500,00</div>
+            <div class="card-location">📍 via giovannetti 6/5 sc. A Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 43/2016 · Lotto 1 · Codice 4342907
+            </div>
+            <div class="card-desc">immobile commerciale destinazione magazzino</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-via-giovannetti-6-5-sc-a-l2317340-p1304459" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 32034,44</div>
+            <div class="card-location">📍 Via G. Airenta, 3, 16010 Rossiglione GE, Italia Rossiglione (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 142/2024 · Lotto 10051 · Codice 4339039
+            </div>
+            <div class="card-desc">GENOVA -ROSSIGLIONE VIA G. AIRENTA, 3 APPARTAMENTO al 5° ed ultimo piano, in buone condizioni generali, con finiture ed impianti funzionanti, di MQ 94,83,composto da disimpegno d’...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-rossiglione-via-gerolamo-airenta-3-l2320350-p1306240" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 33738,00</div>
+            <div class="card-location">📍 Via Nostra signora della guardia 94 Castiglione Chiavarese (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 344/2024 · Lotto LOTTO UNICO · Codice 4328023
+            </div>
+            <div class="card-desc">Villetta ubicata a Castiglione Chiavarese (GE) - Via Nostra Signora della Guardia 94 composto da piano terra, sottotetto e piccolo edificio con cantine di pertinenza insistente sul...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-castiglione-chiavarese-via-nostra-signora-della-guardia-94-l2324256-p1308415" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>CANTINA</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 34213,03</div>
+            <div class="card-location">📍 Via alla Calata Marinetta, 24, 16128 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 361/2023 · Lotto 5 · Codice 4350406
+            </div>
+            <div class="card-desc">Piena proprietà della cantina ubicata a Genova (GE), Via alla Calata Marinetta, contraddistinto con il civico n. 24, interno D, posto al piano S1. L’unità è composta da n. tre ambi...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-cantina-genova-via-alla-calata-marinetta-24-16128-genova-ge-italia-l2320441-p1306305" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 34450,00</div>
+            <div class="card-location">📍 Via Caderiva civ. 30 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 59/2025 · Lotto 1 · Codice 4351927
+            </div>
+            <div class="card-desc">Quota 1000/1000 di piena proprietà di appartamento interno 9 e sito al piano quinto (sottotetto), con accesso dal piano quarto e raggiungibile con scala interna; l’immobile è compo...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-caderiva-civ-30-l2319483-p1305763" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 34599,00</div>
+            <div class="card-location">📍 località Brughe Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 47 · Codice 4276596
+            </div>
+            <div class="card-desc">Terreni ubicati in località Brughe nel quartiere di Molassana che costituiscono un unico lotto di forma irregolare con superficie complessiva pari a mq 33.678, formato da 13 partic...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-genova-localita-brughe-l2313173-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 36225,00</div>
+            <div class="card-location">📍 Via Monfenera, 9B Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 353/2024 · Lotto LOTTO UNICO · Codice 4341988
+            </div>
+            <div class="card-desc">Appartamento ubicato in Genova, Via Monfenera 9b interno 1 e cantina. L'unità immobiliare è ubicata al piano terreno dello stabile, le caratteristiche interne dell'alloggio risulta...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-monfenera-9b-l2329045-p1311368" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>LOTTO EDIFICABILE, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 36669,00</div>
+            <div class="card-location">📍 quartiere le Ville di San Bernardo Sant'Olcese (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 42 · Codice 4248708
+            </div>
+            <div class="card-desc">Per la piena ed intera proprietà: Terreno edificabile a Sant’Olcese, frazione di San Bernardo, quartiere le Ville di San Bernardo, della superficie commerciale di 2764,00 mq. Il te...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-edificabile-sant-olcese-quartiere-le-ville-di-san-bernardo-l2313168-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 37125,00</div>
+            <div class="card-location">📍 Via Teglia, 107, 16161 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 562/2024 · Lotto LOTTO UNICO · Codice 4338633
+            </div>
+            <div class="card-desc">locale commerciale sito a Genova- circoscriz Valpolcevera- Via Teglia n.107R piano terra con tre separati accessi si compone di due ampi ambienti principali con divisioni interne, ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-via-teglia-107-16161-genova-ge-italia-l2323147-p1307783" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE, TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 39000,00</div>
+            <div class="card-location">📍 Frazione San Lorenzo della Costa Santa Margherita Ligure (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 42/2002 · Lotto 3 · Codice 4353580
+            </div>
+            <div class="card-desc">LOTTO N° 3: Piena proprietà degli immobili n.ro 6 – mappale 1380 sub 1 (fabbricato non residenziale) e n.ro 8 – mappale 1351 (terreno di qualità uliveto) siti nella frazione del Co...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-santa-margherita-ligure-frazione-san-lorenzo-della-costa-l2324173-p1308366" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 41040,00</div>
+            <div class="card-location">📍 Corso Goffredo Mameli, 392, 16035 Rapallo GE, Italia Rapallo (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 301/2025 · Lotto LOTTO UNICO · Codice 4351858
+            </div>
+            <div class="card-desc">nuda proprietà per la quota di 1/1 di appartamento ubicato a Rapallo (GE) - Corso Goffredo Mameli 392, interno 8, piano 2, composto da ingresso, soggiorno con zona cottura, studio,...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-rapallo-corso-goffredo-mameli-392-16035-rapallo-ge-italia-l2319287-p1305638" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 41132,81</div>
+            <div class="card-location">📍 Via alla Stazione 16 Mele (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 61/2022 · Lotto LOTTO UNICO · Codice 4272421
+            </div>
+            <div class="card-desc">Piena Proprietà dell’immobile ad uso abitazione, sito nel Comune di Mele (GE), Via alla Stazione, civico n. 16. Trattasi di abitazione isolata, su due piani, con annessi deposito a...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-mele-via-alla-stazione-16-l2323865-p1308191" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 41930,00</div>
+            <div class="card-location">📍 Via Carnia, 57/8, 16161 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 342/2025 · Lotto LOTTO UNICO · Codice 4354263
+            </div>
+            <div class="card-desc">Appartamento ubicato a Genova (GE) - VIA CARNIA n. 57, interno 8, piano 3-4. Abitazione di tipo popolare di circa 100 mq lordi, posta al terzo piano, composta da un ingresso, soggi...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-carnia-57-16161-genova-ge-italia-l2326174-p1309593" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 42105,45</div>
+            <div class="card-location">📍 Via delle Gavette, 39/10 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 258/2025 · Lotto LOTTO UNICO · Codice 4352498
+            </div>
+            <div class="card-desc">Appartamento ubicato a Genova (GE) – Via delle Gavette, 39 sc. SX interno 10piano 5.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-delle-gavette-39-10-l2321573-p1306858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 42210,00</div>
+            <div class="card-location">📍 Via del Lagaccio, 31/3, 16134 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 136/2024 · Lotto 2 · Codice 4351443
+            </div>
+            <div class="card-desc">LOTTO 2, così costituito:•Unità immobiliare si trova al piano terra di una palazzina a destinazione residenziale, sita in Genova, di via del Lagaccio 31/3. L’appartamento è così co...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-del-lagaccio-31-3-16134-genova-ge-italia-l2318123-p1304890" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 44219,00</div>
+            <div class="card-location">📍 Via Montelungo 2 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 129/2024 · Lotto 3 · Codice 4355420
+            </div>
+            <div class="card-desc">Appartamento posto al piano terra del fabbricato sito in Genova, Via Montelungo 2, composto da un locale soggiorno, cucina, camera da letto, un servizio igienico nonché corridoio e...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329509-p1311702" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>FABBRICATI COSTRUITI PER ESIGENZE COMMERCIALI, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 45360,38</div>
+            <div class="card-location">📍 via pezzonasca sc Moconesi (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 452/2018 · Lotto LOTTO UNICO · Codice 4245721
+            </div>
+            <div class="card-desc">Quota pari al 100% della piena proprietà del fabbricato commerciale ubicato a Moconesi (Ge) - via Pezzonasca S.C., piano T: trattasi di una porzione di capannone - immobile produtt...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-commerciale-moconesi-via-pezzonasca-sc-l2319141-p1305559" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 46830,00</div>
+            <div class="card-location">📍 Via Montelungo 2 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 129/2024 · Lotto 4 · Codice 4355421
+            </div>
+            <div class="card-desc">Appartamento posto al piano terra del fabbricato ubicato in Genova, Via Montelungo 2, composto da un locale soggiorno, cucina, due camere da letto, un servizio igienico nonché corr...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329510-p1311702" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZI, BOTTEGHE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 49360,00</div>
+            <div class="card-location">📍 Via Ospedale di S. Raffaele, 1 R/3r, 16152 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 309/2024 · Lotto LOTTO UNICO · Codice 4329634
+            </div>
+            <div class="card-desc">1/1 Diritto di proprietà - IMMOBILE AD USO RISTORANTE UBICATO A GENOVA (GE) - VIA OSPEDALE SAN RAFFAELE 1R 3R - PIAZZA SANTUARIO DI CORONATA 2R 3R, BENI NR. 1 – 2 – 3 – 4 – 5.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-genova-via-ospedale-di-s-raffaele-1-r-3r-16152-genova-ge-italia-l2323310-p1307884" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 50941,00</div>
+            <div class="card-location">📍 VIA FRATELLI CANEPA CIV. 48 Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 520/2024 · Lotto 7 · Codice 4336795
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI LOCALE AD USO MAGAZZINO A SERRA RICCO' (GE) IN VIA FRATELLI CANEPA CIV. 48, TRASFORMATO PARZIALMENTE IN LOCALI AD USO COMMERCIALE, POSTO AL PIANO SEMINTERRATO. ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-serra-ricco-via-fratelli-canepa-civ-48-l2317163-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, MAGAZZINI E LOCALI DI DEPOSITO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 51100,00</div>
+            <div class="card-location">📍 Frazione San Lorenzo della Costa Santa Margherita Ligure (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 42/2002 · Lotto 2 · Codice 4353579
+            </div>
+            <div class="card-desc">LOTTO N° 2: Piena proprietà degli immobili n.ro 5 – mappale 2186 (fabbricato non residenziale) e n.ro 7 – mappale 2187 (piccolo magazzino con ampia corte) siti nella frazione del C...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-santa-margherita-ligure-frazione-san-lorenzo-della-costa-l2324172-p1308366" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 51124,44</div>
+            <div class="card-location">📍 Via Fereggiano, 203A, 203 B 16144 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 342/2025 · Lotto LOTTO UNICO · Codice 4351675
+            </div>
+            <div class="card-desc">Negozio ubicato a Genova, Via Fereggiano n. 203 A – 203 B rosso, piano terra, composto da quattro vani, servizio igienico con antibagno</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-genova-via-fereggiano-203a-203-b-16144-genova-ge-italia-l2318755-p1305311" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 51305,00</div>
+            <div class="card-location">📍 Via dei Giustiniani,17 int. 22 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 465/2025 · Lotto LOTTO UNICO · Codice 4353585
+            </div>
+            <div class="card-desc">Appartamrnto ubicato in Genova (GE), Via dei Giustiniani 17/22</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-dei-giustiniani-17-int-22-l2324181-p1308373" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 51920,00</div>
+            <div class="card-location">📍 Via Piero Pinetti, 41, 16144 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 400/2025 · Lotto LOTTO UNICO · Codice 4350880
+            </div>
+            <div class="card-desc">Tribunale di Genova -+ Immobile sito in Genova Via Piero Pinetti 41-1 composto da ingresso/soggiorno con cucina a vista, tre camere, un locale bagno oltre a due piccoli balconi</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-piero-pinetti-41-16144-genova-ge-italia-l2316765-p1304096" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 52181,72</div>
+            <div class="card-location">📍 Via Dottore A. Gianelli n. 72 Carro (SP) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 13/2023 · Lotto LOTTO UNICO · Codice 4336733
+            </div>
+            <div class="card-desc">Intera proprietà di fabbricato civile ubicato a Carro (SP), Via Dottore A. Gianelli n. 72, costituito da edificio da cielo a terra, di epoca secolare, elevato su due piani a destin...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-carro-via-a-m-gianelli-72-19012-carro-sp-italia-l2329997-p1311985" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 52317,14</div>
+            <div class="card-location">📍 Via Steneri, civico n. 15, piani T -1 Avegno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 74/2023 · Lotto LOTTO UNICO · Codice 4294871
+            </div>
+            <div class="card-desc">LOTTO PRIMO: Piena Proprietà di villetta, in Avegno (GE), Via Steneri, civico n. 15, piani T, -1. Composta da vani 3,5 catastali: un ingresso, una camera, un ampio locale adibito p...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-avegno-via-steneri-civico-n-15-piani-t-1-l2326658-p1309897" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 53490,00</div>
+            <div class="card-location">📍 Via del Lagaccio, 31/4, 16134 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 136/2024 · Lotto 3 · Codice 4351444
+            </div>
+            <div class="card-desc">LOTTO 3È costituito da:•Unità immobiliare si trova al piano terra di una palazzina a destinazione residen-ziale, contraddistinta dal civico numero 31 di via del Lagaccio interno 4....</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-del-lagaccio-31-4-16134-genova-ge-italia-l2318124-p1304890" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO, GARAGE O AUTORIMESSA, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 53698,00</div>
+            <div class="card-location">📍 Via Caduti di Nassirya, località Bordini Capriata d'Orba (AL) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 98/2015 · Lotto 52 · Codice 4276591
+            </div>
+            <div class="card-desc">Per la piena ed intera proprietà: Appartamento ubicato in Via Caduti di Nassirya n. snc, località Bordini, della superficie commerciale di 203,66 mq disposto su quattro livelli ed ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-capriata-d-orba-via-caduti-di-nassirya-localita-bordini-l2313175-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO, GARAGE O AUTORIMESSA, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 54528,00</div>
+            <div class="card-location">📍 Via Caduti di Nassirya, località Bordini Capriata d'Orba (AL) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 98/2015 · Lotto 53 · Codice 4276592
+            </div>
+            <div class="card-desc">Per la piena ed intera proprietà: Appartamento ubicato in Via Caduti di Nassirya n. snc, località Bordini, della superficie commerciale di 203,80 mq disposto su quattro livelli ed ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-capriata-d-orba-via-caduti-di-nassirya-localita-bordini-l2313176-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 54660,00</div>
+            <div class="card-location">📍 Via S. Carlo di Cese, 36, 16155 San Carlo di Cese GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 199/2024 · Lotto 1 · Codice 4343392
+            </div>
+            <div class="card-desc">LOTTO 1° : costituito dalla piena proprietà di immobile ad uso abitativo situato in Comune di Genova (GE) – Via San Carlo di Cese, Edificio 36H, interno 3, esteso su tutto il piano...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-s-carlo-di-cese-36-16155-san-carlo-di-cese-ge-italia-l2315963-p1303585" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 54720,00</div>
+            <div class="card-location">📍 Viale Costa dei Landò Cogorno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 70/2024 · Lotto 2 · Codice 4319329
+            </div>
+            <div class="card-desc">Trattasi di posti auto scoperti, accessibili tramite la diramazione di Viale Costa dei Landò</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-cogorno-viale-costa-dei-lando-l2329378-p1311604" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 54786,00</div>
+            <div class="card-location">📍 Via Germano Jori, 42, 16159 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 357/2025 · Lotto LOTTO UNICO · Codice 4355063
+            </div>
+            <div class="card-desc">Immobile sito in Genova, Via Germano Jori 42 composto da un ampio ingresso cieco, che da accesso a tre camere, al bagno e al soggiorno da cui si accede al cucinino con dispensa. Pe...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-germano-jori-42-16159-genova-ge-italia-l2328549-p1311069" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>LOTTO EDIFICABILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 57573,00</div>
+            <div class="card-location">📍 frazione Località Bordini Capriata d'Orba (AL) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 46 · Codice 4276590
+            </div>
+            <div class="card-desc">Per la piena ed intera proprietà: Terreno residenziale a CAPRIATA D'ORBA, frazione Località Bordini, della superficie commerciale di 9.793,00 mq.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-edificabile-capriata-d-orba-frazione-localita-bordini-l2313172-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 60000,00</div>
+            <div class="card-location">📍 Via del Campasso, 17/interno 3 piano 1, 16151 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 178/2024 · Lotto LOTTO UNICO · Codice 4328809
+            </div>
+            <div class="card-desc">Abitazione residenziale di tipo popolare, ubicata in Genova (GE), Via del Campasso 17, interno 3, piano 1, di 73 mq netti circa composto da un ingresso alla genovese/soggiorno (mq....</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-del-campasso-17-interno-3-piano-1-16151-genova-ge-italia-l2318490-p1305124" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>STALLE, SCUDERIE, RIMESSE, AUTORIMESSE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 62437,50</div>
+            <div class="card-location">📍 Via Madonna delle Vigne Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 774/2017 · Lotto 1 · Codice 4338215
+            </div>
+            <div class="card-desc">Avviso di vendita immobiliare - Lotto formato dai seguenti beni: • Stalla ubicata a Genova (GE) - Via Madonna delle Vigne SNC • Terreno ubicato a Genova (GE) - Via Madonna delle Vi...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-garage-genova-via-madonna-delle-vigne-l2327667-p1310457" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 62500,00</div>
+            <div class="card-location">📍 Via Walter Fillak, 13, 16151 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 255/2025 · Lotto LOTTO UNICO · Codice 4349587
+            </div>
+            <div class="card-desc">quinto piano ubicato nel quartiere di Sampierdarena . La zona è facilmente accessibile con i mezzi pubblici e con quelli propri.L’immobile è costituito n.6 vani che corrispondono ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-walter-fillak-13-16151-genova-ge-italia-l2313421-p1302018" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 63597,00</div>
+            <div class="card-location">📍 VIA FRATELLI CANEPA CIV. 48, INT. 2 Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 520/2024 · Lotto 6 · Codice 4336792
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI APPARTAMENTO AD USO ABITAZIONE A SERRA RICC0' (GE) IN VIA FRATELLI CANEPA CIV. 48, INT. 2 AL 2° PIANO COMPOSTO DA INGRESSO, CUCINA E TRE CAMERE, IL BAGNO E' STA...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-serra-ricco-via-fratelli-canepa-civ-48-int-2-l2317161-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 65000,00</div>
+            <div class="card-location">📍 Via Francesco Crispi, civ 166 Sori (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 365/2025 · Lotto LOTTO UNICO · Codice 4353332
+            </div>
+            <div class="card-desc">Unità immobiliare sita in F. Crispi civ. 166 (tratto dell'Aurelia), in Sori (GE), posta amargine della via Aurelia Catastalmente individuata come negozio Categoria C/1, adibita ad ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-sori-via-f-crispi-166-16030-sori-ge-italia-l2323646-p1308075" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 65150,00</div>
+            <div class="card-location">📍 VIA EVASIO MONTANELLA 96 SCALA C INTERNO 8 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 179/2022 · Lotto LOTTO UNICO · Codice 4354920
+            </div>
+            <div class="card-desc">APPARTAMENTO UBICATO NELLA DELEGAZIONE DI PRA' COMPOSTO DA INGRESSO, ZONA FORMATA DA CUCININO, ZONA PRANZO/TINELLO, UNA CAMERA CENTRALE, UNA CAMERA ADIACENTE, UN BAGNO FINESTRATO E...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-evasio-montanella-96-scala-c-interno-8-l2328115-p1310784" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, POSTO AUTO, CANTINA</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 66225,00</div>
+            <div class="card-location">📍 Viale Milite Ignoto, 31 Busalla (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 311/2025 · Lotto LOTTO UNICO · Codice 4354748
+            </div>
+            <div class="card-desc">•BENE N° 1 - APPARTAMENTO UBICATO A BUSALLA (GE) - VIA MILITE IGNOTO, EDIFICIO31, INTERNO 2, PIANO 1•BENE N° 2 – BOX POSTO AUTO UBICATO A BUSALLA (GE) - VIA MILITE IGNOTO, EDIFICI...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-busalla-viale-milite-ignoto-31-l2327642-p1310433" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 67528,00</div>
+            <div class="card-location">📍 Via Pierino Negrotto Cambiaso, 127, 16159 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 104/2025 · Lotto LOTTO UNICO · Codice 4354022
+            </div>
+            <div class="card-desc">In Comune di Genova (GE), Via Pierino Negrotto Cambiaso civico 127, piena proprietà di appartamento, contraddistinto con l’interno 14, posto al piano terra, della superficie netta ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-pierino-negrotto-cambiaso-127-16159-genova-ge-italia-l2325476-p1309152" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 69246,00</div>
+            <div class="card-location">📍 VIA FRATELLI CANEPA CIV. 48, INT. 1 Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 520/2024 · Lotto 11 · Codice 4336798
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI APPARTAMENTO AD USO ABITAZIONE A SERRA RICCO' (GE) VIA FRATELLI CANEPA CIV. 48, INT. 1 AL PRIMO PIANO, COMPOSTO DA INGRESSO, BAGNO, CUCINA, TRE CAMERE, POGGIOLO...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-serra-ricco-via-fratelli-canepa-civ-48-int-1-l2317165-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 72569,00</div>
+            <div class="card-location">📍 Viale C.Canepa, civ. 10 int 7 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 186/2025 · Lotto 4 · Codice 4346935
+            </div>
+            <div class="card-desc">piena proprietà di appartamento ubicato a Genova (GE) - Viale C.Canepa, civ. 10 int 7, interno 7, piano 4</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-viale-c-canepa-civ-10-int-7-l2323096-p1307754" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 76570,31</div>
+            <div class="card-location">📍 Via dell'Ombra, 5, 16132 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 4415/2024 · Lotto LOTTO UNICO · Codice 4313271
+            </div>
+            <div class="card-desc">Garage ubicato a Genova (GE) - Via dell'Ombra edificio 5R</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-via-dell-ombra-genova-ge-italia-l2323301-p1307879" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>TERRENO, ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 77458,40</div>
+            <div class="card-location">📍 Via de Mari, 16022 Davagna GE, Italia Davagna (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 283/2025 · Lotto LOTTO UNICO · Codice 4354818
+            </div>
+            <div class="card-desc">• BENE N° 1 -APPARTAMENTO UBICATO A DAVAGNA (GE) - VIA DE MARI, CIV. 25, PIANO T-1• BENE N° 2 - TERRENO UBICATO A DAVAGNA (GE) - VIA DE MARI• BENE N° 3 - TERRENO UBICATO A DAVAGNA ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-davagna-via-de-mari-25-16022-davagna-ge-italia-l2327867-p1310597" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 77767,59</div>
+            <div class="card-location">📍 V. Antonio Sant'Elia, 204/4, 16153 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 369/2025 · Lotto LOTTO UNICO · Codice 4354620
+            </div>
+            <div class="card-desc">In Comune di Genova (GE) piena proprietà dell’appartamento sito in Via Sant’Elia civico n. 204 interno 4, posto al secondo piano, composto da ingresso, ampio salone, disimpegno, cu...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-v-antonio-sant-elia-204-4-16153-genova-ge-italia-l2327303-p1310198" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZI, BOTTEGHE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 78540,00</div>
+            <div class="card-location">📍 Via dell'Ombra, 4, 16132 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 14/2025 · Lotto LOTTO UNICO · Codice 4341078
+            </div>
+            <div class="card-desc">Piena ed intera proprietà della seguente locale ad uso commerciale ubicato a Genova (GE), Via dell'Ombra, edificio 4, interno 3, piano 1.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-genova-via-dell-ombra-4-16132-genova-ge-italia-l2319279-p1305632" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 78670,69</div>
+            <div class="card-location">📍 Salita Giovanni Meloni, 3, 16137 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 32/2025 · Lotto LOTTO UNICO · Codice 4355199
+            </div>
+            <div class="card-desc">appartamento posto al primo piano, composto da ingresso alla genovese, cucina, tre camere, bagno, ripostiglio e annessa ampia terrazza.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-salita-giovanni-meloni-3-l2328916-p1311281" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 78981,00</div>
+            <div class="card-location">📍 VIA MARASSI 3, INT. 4 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 231/2023 · Lotto LOTTO UNICO · Codice 4305271
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI APPARTAMENTO AD USO ABITAZIONE POSTO A GENOVA (GE) IN VIA MARASSI 3, INT. 4 COMPOSTO DA INGRESSO/SOGGIORNO CON RIPOSTIGLIO, UNA CAMERA SINGOLA, UNA CAMERA MATRI...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-marassi-3-int-4-l2317070-p1304289" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 79000,00</div>
+            <div class="card-location">📍 Via Currò, 12/interno 7, 16151 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 33/2024 · Lotto LOTTO UNICO · Codice 4351633
+            </div>
+            <div class="card-desc">Lotto 1 - Piena proprietà di appartamento sito in Genova, Via Currò n. 12, interno 7, piano 3.Dati di superficie: Totale: 99 mq .L'unità immobiliare si compone di: vano di ingresso...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-curro-12-interno-7-16151-genova-ge-italia-l2318666-p1305267" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 80000,00</div>
+            <div class="card-location">📍 Via Aldo Manuzio, 17/13 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 4048/2025 · Lotto LOTTO UNICO · Codice 4352555
+            </div>
+            <div class="card-desc">Appartamento sito in Genova nel quartiere di San Fruttuoso, Via Aldo Manuzio 17 interno 13 posto al 2° piano del condominio scala DX.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-aldo-manuzio-17-13-l2321656-p1306889" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 83600,00</div>
+            <div class="card-location">📍 Via Capitan Romeo 52 - 54, 16011 Arenzano GE, Italia Arenzano (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 393/2025 · Lotto 2 · Codice 4351951
+            </div>
+            <div class="card-desc">In Comune di Arenzano (GE), il 100% della piena proprietà del negozio segnato con il numero civico 52 - 54 (cinquantadue - cinquantaquattro) di Via Capitan Romeo (già civ. 26R – 28...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-arenzano-via-capitan-romeo-52-54-l2319547-p1305807" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 84940,00</div>
+            <div class="card-location">📍 via del mare Arenzano (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 43/2016 · Lotto 2 · Codice 4342908
+            </div>
+            <div class="card-desc">immobile commerciale uso magazzino</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-arenzano-via-del-mare-l2317341-p1304459" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>FABBRICATO RURALE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 87750,00</div>
+            <div class="card-location">📍 Via Madonna delle Vigne Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 774/2017 · Lotto 2 · Codice 4338216
+            </div>
+            <div class="card-desc">Avviso di vendita immobiliare - Lotto formato dai seguenti beni: • Fabbricato rurale ubicato a Genova (GE) - Via Madonna delle Vigne 24 • Fabbricato rurale ubicato a Genova (GE) - ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-rurale-genova-via-madonna-delle-vigne-l2327668-p1310457" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 87750,00</div>
+            <div class="card-location">📍 Viale Virginia Centurione Bracelli 44A/3 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 421/2024 · Lotto LOTTO UNICO · Codice 4332358
+            </div>
+            <div class="card-desc">Appartamento di 6 vani situato al primo piano di un edificio dotato di ascensore, in buono stato di conservazione, composto da ingresso, due camere, un ampio salone, cucina abitabi...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-viale-virginia-centurione-bracelli-44a-3-16142-genova-ge-italia-l2320724-p1306486" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 89263,20</div>
+            <div class="card-location">📍 Via Tullio Molteni, 7, 16151 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 37/2025 · Lotto LOTTO UNICO · Codice 4341321
+            </div>
+            <div class="card-desc">Piena proprietà per quota 1/1 di appartamento ubicato a Genova (GE), in via Molteni civico 7, interno 7, piano terzo con ascensore, vani 6,5, della superficie lorda catastale di 11...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-tullio-molteni-7-16151-genova-ge-italia-l2327858-p1310592" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 91031,00</div>
+            <div class="card-location">📍 Via Montelungo 2 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 129/2024 · Lotto 2 · Codice 4355419
+            </div>
+            <div class="card-desc">Appartamento posto al piano primo del fabbricato ubicato in Genova, Via Montelungo 2, composto da un ampio locale soggiorno con cucina, tre camere da letto, due servizi igienici no...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329508-p1311702" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 96000,00</div>
+            <div class="card-location">📍 Via Negroponte, 105, 16154 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 239/2020 · Lotto LOTTO UNICO · Codice 4341954
+            </div>
+            <div class="card-desc">Appartamento sito in Genova, Via Negroponte, 105 interno 24, piano 8 - S1, identificato al NCEU del Comune di Genova, sezione SEP al foglio 51 particella 2386, subalterno 33, Z.C.2...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-negroponte-105-16154-genova-ge-italia-l2316629-p1304017" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 98715,00</div>
+            <div class="card-location">📍 Via S. Pier d'Arena 103 INT 5, 16149 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 212/2022 · Lotto LOTTO UNICO · Codice 4342281
+            </div>
+            <div class="card-desc">BENE N.1Catasto fabbricati di Genova Dati identificativi Sezione SAM Foglio n. 44, Part. n. 943, Sub. n 10, Zona Cens. 3 Categoria: A/3, Classe 5, Consistenza 11,5 vani, Superfic...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-s-pier-d-arena-16149-genova-ge-italia-l2319993-p1305990" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>APPARTAMENTO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 100000,00</div>
+            <div class="card-location">📍 Piazza Marconi 28 Sant'Olcese (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 305/2025 · Lotto UNICO · Codice 4351396
+            </div>
+            <div class="card-desc">Abitazione indipendente su due livelli fuori , fuori terra sita in Sant'Olcese (GE) Piazza Marconi 28, edificio unico, piano T-1</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-sant-olcese-piazza-marconi-28-l2318043-p1304856" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 101735,17</div>
+            <div class="card-location">📍 Via Luigi Bailo 29 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 416/2025 · Lotto LOTTO UNICO · Codice 4352112
+            </div>
+            <div class="card-desc">Piena proprietà dell'appartamento sito in Genova - Via Luigi Bailo civ. 29, interno 1 (uno) della consistenza di 5 (cinque) vani catastali, composto da: ingresso, soggiorno, una ca...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-luigi-bailo-29-l2320192-p1306118" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 102920,00</div>
+            <div class="card-location">📍 Via Carlo Orgiero, 6, 16151 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 328/2025 · Lotto LOTTO UNICO · Codice 4354413
+            </div>
+            <div class="card-desc">Appartamento al primo piano in buono stato conservativo è composto da: ingresso, posto cottura e soggiorno (in open space), tre camere da letto, bagno, ripostiglio e corridoio di d...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-carlo-orgiero-6-16151-genova-ge-italia-l2326559-p1309838" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 110054,00</div>
+            <div class="card-location">📍 V. Piazzagrande, 86, 16158 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 323/2024 · Lotto LOTTO UNICO · Codice 4337163
+            </div>
+            <div class="card-desc">Piena ed intera proprietà di villetta a schiera da cielo a terra, su tre piani, superficie complessiva convenzionale mq.131,20 circa, con edifici in aderenza su due lati, raggiungi...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-v-piazzagrande-86-16158-genova-ge-italia-l2320923-p1306575" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 112000,00</div>
+            <div class="card-location">📍 Via Giacomo Balbi Piovera, 16149 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 387/2023 · Lotto LOTTO UNICO · Codice 4353858
+            </div>
+            <div class="card-desc">Appartamento ubicato a Genova (GE) - Via Giacomo Balbi Piovera, edificio 21, interno 11, piano 4 composto da ingresso, ripostiglio, disimpegno, camera 1, camera 2, bagno, soggiorno...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-giacomo-balbi-piovera-21-11-l2325022-p1308838" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 114446,00</div>
+            <div class="card-location">📍 Via Lamberto Loria, 261/4, 16142 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 269/2025 · Lotto LOTTO UNICO · Codice 4353568
+            </div>
+            <div class="card-desc">Appartamento in via Lamberto Loria 261 interno 4 - Genova – municipio bassa val Bisagno, composto da ingresso, cucina, due camere, soggiorno/pranzo, bagno, ripostiglio e annesse ba...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-lamberto-loria-261-16142-genova-ge-italia-l2324151-p1308351" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 123302,00</div>
+            <div class="card-location">📍 VIA FRATELLI CANEPA CIV. 48A Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 520/2024 · Lotto 10 · Codice 4336796
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI LOCALE AD USO NEGOZIO (ATTUALMENTE FARMACIA) A SERRA RICCO' IN VIA FRATELLI CANEPA 48A AL PIANO TERRA COMPOSTO DA ZONA VENDITA, RETRO E BAGNO CON ANTIBAGNO. SUP...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-serra-ricco-via-fratelli-canepa-civ-48a-l2317164-p1304357" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 128094,03</div>
+            <div class="card-location">📍 Via Nino Bixio, 10/2 Rapallo (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 15/2025 · Lotto LOTTO UNICO · Codice 4353856
+            </div>
+            <div class="card-desc">Appartamento ubicato a Rapallo (GE) - Via Nino Bixio civico 10 interno 2.Trattasi di un appartamento situato al piano terra (rialzato) di un edificio dotato di ascensore, composto ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-rapallo-via-nino-bixio-10-2-l2325019-p1308835" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 135725,00</div>
+            <div class="card-location">📍 Via Domenico Carli, Serra Riccò GE, Italia Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 97/2025 · Lotto LOTTO UNICO · Codice 4352102
+            </div>
+            <div class="card-desc">L'immobile oggetto di esecuzione immobiliare è sito in Via D.Carli 90/1 - Serra Ricco' (GE), è dislocato su tre piani fuori terra oltre al piano terra adibito a box auto. Dispone d...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-serra-ricco-via-domenico-carli-serra-ricco-ge-italia-l2320168-p1306105" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>LOTTO EDIFICABILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 138308,00</div>
+            <div class="card-location">📍 Frazione di Torrazza Sant'Olcese (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 43 · Codice 4248709
+            </div>
+            <div class="card-desc">Per la piena ed intera proprietà: Terreno edificabile a Sant’Olcese, frazione di Torrazza, della superficie commerciale di 10.563,00 mq. Il terreno è ubicato a m 323 s.l.m. ed è si...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-edificabile-sant-olcese-frazione-di-torrazza-l2313169-p1301858" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, CANTINA, POSTO AUTO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 140336,00</div>
+            <div class="card-location">📍 VIA FEREGGIANO 30, INT. 7 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 9956/2024 · Lotto LOTTO UNICO · Codice 4353781
+            </div>
+            <div class="card-desc">PIENA PROPRIETA' DI APPARTAMENTO AD USO ABITAZIONE A GENOVA (GE) IN VIA FEREGGIANO 30, INT. 7 AL 2° PIANO, COMPOSTO DA INGRESSO, SOGGIORNO, DUE CAMERE, DUE BAGNI, UN RIPOSTIGLIO E ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-fereggiano-30-int-7-l2324699-p1308706" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, MAGAZZINO, FABBRICATO RURALE, TERRENO, CANTINA</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 147505,95</div>
+            <div class="card-location">📍 LOCALITA' CAREGLI MOLINARSO n. 43C int. 2 Borzonasca (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 403/2021 · Lotto LOTTO UNICO · Codice 4287200
+            </div>
+            <div class="card-desc">BORZONASCA (GE), Località Caregli Leneio - Caregli Molinarso, piena proprietà di 11 immobili, di cui 5 abitazioni (aventi rispettivamente mq catastali pari a 135, 49, 21, 50 e 50),...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-borzonasca-localita-caregli-leneio-molinarso-l2321132-p1306663" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 150000,00</div>
+            <div class="card-location">📍 Via S. Felice, 17a/1, 16138 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 558/2024 · Lotto LOTTO UNICO · Codice 4343636
+            </div>
+            <div class="card-desc">Piena ed intera proprietà dell’appartamento ubicato a Genova (GE) – Via San Felice 17A, interno 1, piano primo. All'immobile è compreso di balcone sul lato ovest e giardino sul lat...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-s-felice-17a-1-16138-genova-ge-italia-l2319540-p1305806" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO POPOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 173400,00</div>
+            <div class="card-location">📍 Via Giovanni Battista Campodonico 60/4 Lavagna (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 125/2024 · Lotto LOTTO UNICO · Codice 4345608
+            </div>
+            <div class="card-desc">100% BENE immobile gravato dal diritto di abitazione. Appartamento ubicato al civ. 60 int. 4 di Via Giovanni Battista Campodonico in Lavagna (GE) posto al secondo piano (senza asce...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-lavagna-via-giovanni-battista-campodonico-60-4-l2319987-p1305984" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>EDIFICI A DESTINAZIONE PARTICOLARE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 178125,00</div>
+            <div class="card-location">📍 via Pierino Negrotto Cambiaso 67 D Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 250/2024 · Lotto LOTTO UNICO · Codice 4346223
+            </div>
+            <div class="card-desc">Fabbricato adibito ad uso ricreativo, pluripiano, con bar ad uso degli iscritti, sito in Genova, via Pierino Negrotto Cambiaso 67 D, nel quartiere di Rivarolo, Municipio V – Valpol...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-edifici-a-destinazione-particolare-genova-via-pierino-negrotto-cambiaso-67d-l2321146-p1306675" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 192288,00</div>
+            <div class="card-location">📍 Frazione San Lorenzo della Costa Santa Margherita Ligure (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 42/2002 · Lotto 1 · Codice 4353578
+            </div>
+            <div class="card-desc">LOTTO 1: Piena proprietà degli immobili n.ro 1 – mappale 1348 (terreno di qualità Bosco Ceduo), n.ro 3 – mappale 1356 (fabbricato e corte), n.ro 4 – mappale 1357 (fabbricato e cort...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-santa-margherita-ligure-frazione-san-lorenzo-della-costa-l2324171-p1308366" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>FABBRICATO IN CORSO DI COSTRUZIONE, MAGAZZINI E LOCALI DI DEPOSITO, TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 197000,00</div>
+            <div class="card-location">📍 Viale Costa dei Landò Cogorno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 70/2024 · Lotto 1 · Codice 4319328
+            </div>
+            <div class="card-desc">Villino unifamiliare in costruzione, sviluppato su due livelli, oltre a n. 4 fabbricati, per i quali è prevista la demolizione ai fini di recupero della volumetria necessaria al co...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-civile-cogorno-viale-costa-dei-lando-l2329253-p1311529" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 212000,00</div>
+            <div class="card-location">📍 Via A. Martini, 99, 16021 Bargagli GE, Italia Bargagli (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 352/2024 · Lotto LOTTO UNICO · Codice 4354030
+            </div>
+            <div class="card-desc">Immobile in Bargagli (Ge) di Via A. Martini 99 (ex 63B) e più precisamente: A appartamento al piano primo, ingresso esterno, ingresso, cucina, soggiorno, 4 camere, disimpegno, bag...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-bargagli-via-aimone-martini-bargagli-ge-italia-l2325494-p1309166" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE IN VILLINI, MAGAZZINI E LOCALI DI DEPOSITO, POSTO AUTO, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 221500,00</div>
+            <div class="card-location">📍 Via alla Chiesa di Geminiano, 16162 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 65/2025 · Lotto LOTTO UNICO · Codice 4351204
+            </div>
+            <div class="card-desc">Villetta in Genova, Via alla Chiesa di Geminiano, edificio 31-33, posta su tre piani, composta da cantine e ripostigli al piano seminterrato, soggiorno, cucina e bagno al piano 1, ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-villetta-genova-via-alla-chiesa-di-geminiano-16162-genova-ge-italia-l2317614-p1304607" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 253398,38</div>
+            <div class="card-location">📍 Via alla Calata Marinetta, 8, 16128 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 361/2023 · Lotto 3 · Codice 4350405
+            </div>
+            <div class="card-desc">Piena proprietà del locale commerciale, sito in Genova (GE), Via alla Calata Marinetta, contraddistinto con il civico n. 8, posto al piano terra. L’unità immobiliare oggetto di sti...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-genova-via-alla-calata-marinetta-8-16128-genova-ge-italia-l2320440-p1306305" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>NEGOZIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 263150,50</div>
+            <div class="card-location">📍 Via alla Calata Marinetta, 18, 16128 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 361/2023 · Lotto 2 · Codice 4350404
+            </div>
+            <div class="card-desc">Piena proprietà del locale commerciale, sito in Genova (GE), Via alla Calata Marinetta, contraddistinto con il civico n. 18, posto al piano terra. L’unità immobiliare oggetto di st...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-negozio-genova-via-alla-calata-marinetta-18-16128-genova-ge-italia-l2320439-p1306305" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO, CANTINA</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 269727,59</div>
+            <div class="card-location">📍 Via alla Calata Marinetta, 14, 16128 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 361/2023 · Lotto 1 · Codice 4350403
+            </div>
+            <div class="card-desc">Piena proprietà dell’appartamento, sito in Genova (GE), Via alla Calata Marinetta, contraddistinto con il civico n.14, interno 4, posto al secondo piano. L’immobile sviluppa una su...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-alla-calata-marinetta-14-16128-genova-ge-italia-l2320438-p1306305" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO ECONOMICO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 275941,00</div>
+            <div class="card-location">📍 Viale Villa Gavotti 121, interno 2 - Viale Villa Gavotti 119, interno 47 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 1/2025 · Lotto LOTTO UNICO · Codice 4352977
+            </div>
+            <div class="card-desc">Piena proprietà appartamento ubicato a Genova (GE) - Viale Villa Gavotti 121, interno 2, piano T e piena proprietà garage ubicato a Genova (GE) - Viale Villa Gavotti 119, interno 4...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-viale-villa-gavotti-121-interno-2-viale-villa-gavotti-119-interno-47-l2322713-p1307513" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>MAGAZZINO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 324000,00</div>
+            <div class="card-location">📍 Via Albisola, 85/87, 16162 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 33/2024 · Lotto LOTTO UNICO · Codice 4351632
+            </div>
+            <div class="card-desc">Lotto 2 - Diritto di superficie su magazzino sito in Genova, Via Albisola n. 85-87, piano 2. Totale: 598 mq. Magazzino in via Albisola località "Borzoli" nel complesso edilizio ad...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-magazzino-genova-via-albisola-85-87-16162-genova-ge-italia-l2318665-p1305267" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>FABBRICATI COSTRUITI PER ESIGENZE INDUSTRIALI</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 344088,00</div>
+            <div class="card-location">📍 Viale De Gasperi, 3, 16047 Moconesi GE, Italia Moconesi (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE INDUSTRIALE · Ruolo 58/2023 · Lotto LOTTO UNICO · Codice 4329368
+            </div>
+            <div class="card-desc">Complesso aziendale per la lavorazione e vendita all’ingrosso di ardesie, marmi, graniti, pietre e materiale da costruzione in genere, sia allo stato grezzo e/o parzialmente lavora...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-cessione-di-azienda-moconesi-viale-de-gasperi-3-16047-moconesi-ge-italia-l2321426-p1306803" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>OPIFICIO INDUSTRIALE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 344250,00</div>
+            <div class="card-location">📍 Via A. De Gasperi 3B Moconesi (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE INDUSTRIALE · Ruolo 58/2023 · Lotto LOTTO UNICO · Codice 4329355
+            </div>
+            <div class="card-desc">Corpo di fabbrica a destinazione produttivo - artigianale - piano terra e piano primo</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-industriale-moconesi-viale-de-gasperi-3-16047-moconesi-ge-italia-l2321453-p1306815" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>OPIFICI</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 412176,00</div>
+            <div class="card-location">📍 Via Alcide De Gasperi 5 Moconesi (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE INDUSTRIALE · Ruolo 67/2022 · Lotto 4 · Codice 4327604
+            </div>
+            <div class="card-desc">Quota pari a 1000/1000 piena proprietà di fabbricato industriale ubicato a Moconesi (GE) - Viale Alcide De Gasperi, edificio 5, piano T</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-industriale-moconesi-via-alcide-de-gasperi-5-16047-ferrada-ge-italia-l2313232-p1301883" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 423200,00</div>
+            <div class="card-location">📍 Via Alessandro Rimassa, 66/14, 16129 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 67/2025 · Lotto LOTTO UNICO · Codice 4354755
+            </div>
+            <div class="card-desc">UNITA' IMMOBILIARE IN CONDOMINIO AL PIANO QUINTO OLTRE IL PIANO TERRA, INGRESSO IN DISIMPEGNO, SOGGIORNO, STUDIO, CUCINA, TINELLO, TRE CAMERE, DUE BAGNI, DUE RISPOSTIGLI, DUE BALCO...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-alessandro-rimassa-66-14-16129-genova-ge-italia-l2327677-p1310462" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>UFFICIO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 429000,00</div>
+            <div class="card-location">📍 Piazza Portoria, 1, 16121 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 106/2024 · Lotto LOTTO UNICO · Codice 4343582
+            </div>
+            <div class="card-desc">Appartamento-ufficio di 198 mq ubicato a Genova (GE) - Via XX Settembre, edificio 16, scala DX, interno2, piano 2 (oltre cantina annessa). Sono inclusi anche i beni mobili (mobilio...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-ufficio-genova-via-xx-settembre-16-16121-genova-ge-italia-l2319825-p1305923" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>OPIFICI</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 478125,00</div>
+            <div class="card-location">📍 Via Du Cantu, 27, 16030 San Salvatore GE, Italia Cogorno (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE INDUSTRIALE · Ruolo 10/2022 · Lotto LOTTO UNICO · Codice 4338112
+            </div>
+            <div class="card-desc">Piena proprietà del capannone, dell’ente urbano e del piazzale ubicati in Cogorno (GE) - Via du Cantu 27- 29.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-industriale-cogorno-via-du-cantu-27-16030-san-salvatore-ge-italia-l2330925-p1312503" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 513000,00</div>
+            <div class="card-location">📍 Via Francesco Pozzo, 19, 16145 Genova GE, Italia Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 136/2024 · Lotto 1 · Codice 4351442
+            </div>
+            <div class="card-desc">LOTTO 1, così costituito:•Unità immobiliare che si trova al piano terra di una palazzina a destinazione residenziale, sita in Genova, di via Francesco Pozzo 19/1. L’appartamento, a...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-francesco-pozzo-19-16145-genova-ge-italia-l2318122-p1304890" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>ABITAZIONE DI TIPO CIVILE, POSTO AUTO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 538000,00</div>
+            <div class="card-location">📍 Via della Costa 34/int. 13, 16011 Arenzano GE, Italia Arenzano (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 393/2025 · Lotto 3 · Codice 4351952
+            </div>
+            <div class="card-desc">In Comune di Arenzano (GE), località Pineta, il 100% della p.p. dell'appartamento segnato con il civico 34 di Via della Costa, posto al piano primo (primo fuori terra) e contraddis...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-appartamento-arenzano-via-della-costa-34-int-13-16011-arenzano-ge-italia-l2319548-p1305807" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>CONVENTO, CONVITTO O ISTITUTO SIMILARE</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 620000,00</div>
+            <div class="card-location">📍 ia Rinaldo Piaggio civ.54 Santo Stefano d'Aveto (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 9/2019 · Lotto LOTTO UNICO · Codice 4169893
+            </div>
+            <div class="card-desc">I beni oggetto di pignoramento sono:•Bene 1: struttura assistenziale a Santo Stefano d’Aveto (GE)–Via Rinaldo Piaggio civ.54.La residenza protetta (ex Colonia Piaggio–foglio 17, ma...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-convento-o-convitto-santo-stefano-d-aveto-via-rinaldo-piaggio-civ-54-l2327808-p1310550" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>UFFICIO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 658000,00</div>
+            <div class="card-location">📍 Via Roma 11/4 Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 715/2026 · Lotto LOTTO UNICO · Codice 4352831
+            </div>
+            <div class="card-desc">Nuda proprietà dell’immobile, ad esclusione del diritto di usufrutto, con usufruttuario di anni ottantotto al giorno della presente vendita. L'appartamento, di categoria catastale ...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-ufficio-genova-via-roma-11-4-l2322434-p1307385" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>LOTTO EDIFICABILE</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 894000,00</div>
+            <div class="card-location">📍 Quartiere Collina di Coronata, località Campi Genova (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-ALTRA CATEGORIA · Ruolo 98/2015 · Lotto 33 · Codice 4342494
+            </div>
+            <div class="card-desc">Terreno edificabile a destinazione prevalentemente industriale e artigianale ubicato nel quartiere Collina di Coronata, loc. Campi, tra Corso Ferdinando Maria Perrone e Salita Capp...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-terreno-edificabile-genova-quartiere-collina-di-coronata-localita-campi-l2308721-p1299247" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>CASTELLO, IMMOBILE DI PREGIO ARTISTICO E STORICO, TERRENO</h3>
+                <span class="badge-stato badge-verde">Gara da iniziare</span>
+            </div>
+            <div class="card-price">€ 1625574,19</div>
+            <div class="card-location">📍 Via Ponte 1 Serra Riccò (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE RESIDENZIALE · Ruolo 433/2024 · Lotto LOTTO UNICO · Codice 4343393
+            </div>
+            <div class="card-desc">Lotto unico composto dal Castello, denominato Castello di San Cipriano, sito in Serra Riccò (GE), Via Ponte 1, e da n. 6 terreni.</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-palazzo-storico-serra-ricco-via-ponte-1-l2324427-p1308524" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                
+                <h3>FABBRICATI COSTRUITI PER ESIGENZE COMMERCIALI, GARAGE O AUTORIMESSA, TERRENO</h3>
+                <span class="badge-stato badge-rossa">In corso / conclusa</span>
+            </div>
+            <div class="card-price">€ 1870800,00</div>
+            <div class="card-location">📍 Via Isorelle, 16010 Isorelle GE, Italia Savignone (GE) — </div>
+            <div class="card-meta">
+                IMMOBILI-IMMOBILE COMMERCIALE · Ruolo 14/2022 · Lotto LOTTO UNICO · Codice 4337820
+            </div>
+            <div class="card-desc">-Centro Commerciale Vallescrivia, Via Isorelle-Savignone (GE);-Annesso ramo d'azienda dotato di licenze commerciali;-Autorimesse Centro Commerciale Vallescrivia, Via Isorelle-Savig...</div>
+            <a href="https://www.astegiudiziarie.it//vendita-asta-fabbricato-commerciale-savignone-via-isorelle-16010-isorelle-ge-italia-l2323337-p1307901" target="_blank" class="card-link">Scheda dettagliata su Aste Giudiziarie →</a>
+        </div>
+        
+</div>
+<footer>
+    Dati raccolti automaticamente ogni giorno dal
+    <a href="https://www.tribunale.genova.it/venditegiudiziarie/default.aspx?m=1" target="_blank">sito ufficiale del Tribunale di Genova</a>.
+    Uso personale, fonte sempre citata su ogni annuncio.
+</footer>
+<script>
+    const markers = [{"lat": 44.3796688, "lon": 9.1727234, "titolo": "TERRENO", "comune": "", "prezzo": "€ 139,21", "link": "https://www.astegiudiziarie.it//vendita-asta-terreno-avegno-via-steneri-l2326660-p1309897", "nuovo": false}, {"lat": 44.459843, "lon": 8.9793481, "titolo": "LASTRICO SOLARE", "comune": "", "prezzo": "€ 2214,00", "link": "https://www.astegiudiziarie.it//vendita-asta-lastrico-solare-genova-via-geirato-110r-l2313174-p1301858", "nuovo": false}, {"lat": 44.3244584, "lon": 9.356723, "titolo": "TERRENO", "comune": "", "prezzo": "€ 3357,00", "link": "https://www.astegiudiziarie.it//vendita-asta-terreno-cogorno-viale-costa-dei-lando-l2329379-p1311604", "nuovo": false}, {"lat": 44.4075388, "lon": 8.9568814, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 3500,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323697-p1308113", "nuovo": false}, {"lat": 44.4075388, "lon": 8.9568814, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 3500,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323698-p1308113", "nuovo": false}, {"lat": 44.4075388, "lon": 8.9568814, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 3500,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323699-p1308113", "nuovo": false}, {"lat": 44.4075388, "lon": 8.9568814, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 3500,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323700-p1308113", "nuovo": false}, {"lat": 44.4075388, "lon": 8.9568814, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 3500,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-genova-piazza-giovanni-martinez-15-l2323701-p1308113", "nuovo": false}, {"lat": 44.5672235, "lon": 8.9601403, "titolo": "NEGOZI, BOTTEGHE", "comune": "", "prezzo": "€ 9966,79", "link": "https://www.astegiudiziarie.it//vendita-asta-negozio-savignone-via-isorelle-34-l2314198-p1302565", "nuovo": false}, {"lat": 44.2714066, "lon": 9.4359164, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 10830,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-casarza-ligure-via-francolano-l2329380-p1311604", "nuovo": false}, {"lat": 44.4153595, "lon": 9.1945163, "titolo": "ABITAZIONE DI TIPO POPOLARE", "comune": "", "prezzo": "€ 12666,66", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-tribogna-via-piazze-21-e-23-l2326117-p1309551", "nuovo": false}, {"lat": 44.3886828, "lon": 9.1653356, "titolo": "ABITAZIONI E ALLOGGI TIPICI DEI LUOGHI", "comune": "", "prezzo": "€ 14343,75", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-avegno-via-pietrafitta-7-16036-pietrafitta-ge-italia-l2327846-p1310580", "nuovo": false}, {"lat": 44.5672235, "lon": 8.9601403, "titolo": "NEGOZI, BOTTEGHE", "comune": "", "prezzo": "€ 15840,09", "link": "https://www.astegiudiziarie.it//vendita-asta-negozio-savignone-via-isorelle-40-l2314197-p1302565", "nuovo": false}, {"lat": 44.3244584, "lon": 9.356723, "titolo": "PORZIONE DI FABBRICATO IN CORSO DI COSTRUZIONE, TERRENO", "comune": "", "prezzo": "€ 17200,00", "link": "https://www.astegiudiziarie.it//vendita-asta-porzione-di-fabbricato-in-costruzione-cogorno-viale-costa-dei-lando-l2329254-p1311529", "nuovo": false}, {"lat": 44.5044389, "lon": 8.7079273, "titolo": "ABITAZIONE DI TIPO POPOLARE", "comune": "", "prezzo": "€ 19116,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-masone-via-benedetto-maccio-17-2-loc-borgo-del-mulino-16010-masone-ge-italia-l2327081-p1310075", "nuovo": false}, {"lat": 44.553146, "lon": 8.9796474, "titolo": "ABITAZIONE DI TIPO ECONOMICO", "comune": "", "prezzo": "€ 24025,50", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-savignone-v-ponte-di-savignone-27-l2326388-p1309721", "nuovo": false}, {"lat": 44.4351506, "lon": 9.0136105, "titolo": "GARAGE O AUTORIMESSA", "comune": "", "prezzo": "€ 27188,00", "link": "https://www.astegiudiziarie.it//vendita-asta-garage-genova-via-montelungo-2-l2329507-p1311702", "nuovo": false}, {"lat": 44.3998366, "lon": 8.6781181, "titolo": "GARAGE O AUTORIMESSA", "comune": "", "prezzo": "€ 29000,00", "link": "https://www.astegiudiziarie.it//vendita-asta-garage-arenzano-via-del-roccolo-l2331082-p1312614", "nuovo": false}, {"lat": 44.4536532, "lon": 8.8910155, "titolo": "ABITAZIONE DI TIPO POPOLARE", "comune": "", "prezzo": "€ 36225,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-monfenera-9b-l2329045-p1311368", "nuovo": false}, {"lat": 44.4295224, "lon": 8.9542679, "titolo": "ABITAZIONE DI TIPO ECONOMICO", "comune": "", "prezzo": "€ 42105,45", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-delle-gavette-39-10-l2321573-p1306858", "nuovo": false}, {"lat": 44.4351506, "lon": 9.0136105, "titolo": "APPARTAMENTO", "comune": "", "prezzo": "€ 44219,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329509-p1311702", "nuovo": false}, {"lat": 44.4297579, "lon": 9.1823896, "titolo": "FABBRICATI COSTRUITI PER ESIGENZE COMMERCIALI, TERRENO", "comune": "", "prezzo": "€ 45360,38", "link": "https://www.astegiudiziarie.it//vendita-asta-fabbricato-commerciale-moconesi-via-pezzonasca-sc-l2319141-p1305559", "nuovo": false}, {"lat": 44.4351506, "lon": 9.0136105, "titolo": "APPARTAMENTO", "comune": "", "prezzo": "€ 46830,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329510-p1311702", "nuovo": false}, {"lat": 44.3244584, "lon": 9.356723, "titolo": "POSTO AUTO", "comune": "", "prezzo": "€ 54720,00", "link": "https://www.astegiudiziarie.it//vendita-asta-posto-auto-cogorno-viale-costa-dei-lando-l2329378-p1311604", "nuovo": false}, {"lat": 44.5145306, "lon": 8.9002135, "titolo": "STALLE, SCUDERIE, RIMESSE, AUTORIMESSE", "comune": "", "prezzo": "€ 62437,50", "link": "https://www.astegiudiziarie.it//vendita-asta-garage-genova-via-madonna-delle-vigne-l2327667-p1310457", "nuovo": false}, {"lat": 44.5705401, "lon": 8.955386, "titolo": "ABITAZIONE DI TIPO ECONOMICO, POSTO AUTO, CANTINA", "comune": "", "prezzo": "€ 66225,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-busalla-viale-milite-ignoto-31-l2327642-p1310433", "nuovo": false}, {"lat": 44.4084442, "lon": 8.9647698, "titolo": "ABITAZIONE DI TIPO ECONOMICO", "comune": "", "prezzo": "€ 80000,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-aldo-manuzio-17-13-l2321656-p1306889", "nuovo": false}, {"lat": 44.3914756, "lon": 8.6659619, "titolo": "MAGAZZINO", "comune": "", "prezzo": "€ 84940,00", "link": "https://www.astegiudiziarie.it//vendita-asta-magazzino-arenzano-via-del-mare-l2317341-p1304459", "nuovo": false}, {"lat": 44.5145306, "lon": 8.9002135, "titolo": "FABBRICATO RURALE", "comune": "", "prezzo": "€ 87750,00", "link": "https://www.astegiudiziarie.it//vendita-asta-fabbricato-rurale-genova-via-madonna-delle-vigne-l2327668-p1310457", "nuovo": false}, {"lat": 44.4172374, "lon": 8.9585049, "titolo": "ABITAZIONE DI TIPO ECONOMICO", "comune": "", "prezzo": "€ 87750,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-viale-virginia-centurione-bracelli-44a-3-16142-genova-ge-italia-l2320724-p1306486", "nuovo": false}, {"lat": 44.4351506, "lon": 9.0136105, "titolo": "APPARTAMENTO", "comune": "", "prezzo": "€ 91031,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-montelungo-2-l2329508-p1311702", "nuovo": false}, {"lat": 44.4835627, "lon": 8.968284, "titolo": "APPARTAMENTO", "comune": "", "prezzo": "€ 100000,00", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-sant-olcese-piazza-marconi-28-l2318043-p1304856", "nuovo": false}, {"lat": 44.4396362, "lon": 8.969454, "titolo": "ABITAZIONE DI TIPO CIVILE", "comune": "", "prezzo": "€ 101735,17", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-genova-via-luigi-bailo-29-l2320192-p1306118", "nuovo": false}, {"lat": 44.3536822, "lon": 9.2172134, "titolo": "ABITAZIONE DI TIPO ECONOMICO", "comune": "", "prezzo": "€ 128094,03", "link": "https://www.astegiudiziarie.it//vendita-asta-appartamento-rapallo-via-nino-bixio-10-2-l2325019-p1308835", "nuovo": false}, {"lat": 44.4467161, "lon": 8.900664, "titolo": "EDIFICI A DESTINAZIONE PARTICOLARE", "comune": "", "prezzo": "€ 178125,00", "link": "https://www.astegiudiziarie.it//vendita-asta-edifici-a-destinazione-particolare-genova-via-pierino-negrotto-cambiaso-67d-l2321146-p1306675", "nuovo": false}, {"lat": 44.3244584, "lon": 9.356723, "titolo": "FABBRICATO IN CORSO DI COSTRUZIONE, MAGAZZINI E LOCALI DI DEPOSITO, TERRENO", "comune": "", "prezzo": "€ 197000,00", "link": "https://www.astegiudiziarie.it//vendita-asta-fabbricato-civile-cogorno-viale-costa-dei-lando-l2329253-p1311529", "nuovo": false}, {"lat": 44.4091518, "lon": 8.9361055, "titolo": "UFFICIO", "comune": "", "prezzo": "€ 658000,00", "link": "https://www.astegiudiziarie.it//vendita-asta-ufficio-genova-via-roma-11-4-l2322434-p1307385", "nuovo": false}, {"lat": 44.4872535, "lon": 8.9098226, "titolo": "CASTELLO, IMMOBILE DI PREGIO ARTISTICO E STORICO, TERRENO", "comune": "", "prezzo": "€ 1625574,19", "link": "https://www.astegiudiziarie.it//vendita-asta-palazzo-storico-serra-ricco-via-ponte-1-l2324427-p1308524", "nuovo": false}];
+    const map = L.map('map').setView([44.4, 9.0], 9);  // centro approssimativo su Genova/Liguria
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+    }).addTo(map);
+
+    const bounds = [];
+    markers.forEach(m => {
+        const icon = m.nuovo
+            ? L.divIcon({className: '', html: '<div style="background:#34a853;width:14px;height:14px;border-radius:50%;border:2px solid white;box-shadow:0 0 3px rgba(0,0,0,0.4);"></div>', iconSize: [14,14]})
+            : L.divIcon({className: '', html: '<div style="background:#0b3d66;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 3px rgba(0,0,0,0.4);"></div>', iconSize: [12,12]});
+
+        const marker = L.marker([m.lat, m.lon], {icon: icon}).addTo(map);
+        marker.bindPopup(
+            `<strong>${m.titolo}</strong><br>${m.comune}<br>${m.prezzo}<br><a href="${m.link}" target="_blank">Scheda dettagliata →</a>`
+        );
+        bounds.push([m.lat, m.lon]);
+    });
+
+    if (bounds.length > 0) {
+        map.fitBounds(bounds, {padding: [30, 30]});
+    }
+</script>
+</body>
+</html>
