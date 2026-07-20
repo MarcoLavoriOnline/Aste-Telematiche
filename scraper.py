@@ -163,6 +163,19 @@ def scrape_all(headless: bool = True, delay_seconds: float = 2.0) -> list[Annunc
         log.info("Apro la pagina di ricerca...")
         page.goto(BASE_URL, wait_until="networkidle", timeout=60000)
 
+        # Il sito NON carica i risultati da solo: serve cliccare esplicitamente
+        # il bottone "AVVIA RICERCA" (anche lasciando tutti i filtri vuoti).
+        log.info("Clicco il bottone 'AVVIA RICERCA'...")
+        try:
+            page.get_by_text("AVVIA RICERCA", exact=False).first.click(timeout=10000)
+        except Exception as e:
+            log.warning(f"Non sono riuscito a cliccare 'AVVIA RICERCA' col testo: {e}")
+            log.warning("Provo un selettore alternativo...")
+            # fallback: qualunque bottone/input con quel testo o vicino al form immobili
+            page.locator("button:has-text('AVVIA RICERCA'), input[value*='AVVIA RICERCA']").first.click(timeout=10000)
+
+        page.wait_for_load_state("networkidle", timeout=30000)
+
         try:
             page.wait_for_selector(".lib-panel", timeout=20000)
         except Exception:
