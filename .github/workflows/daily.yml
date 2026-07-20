@@ -29,9 +29,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
+      
       - name: Installa le dipendenze
-        run: pip install playwright requests
+        run: pip install playwright requests beautifulsoup4 lxml
 
       - name: Installa il browser Chromium per Playwright
         run: playwright install --with-deps chromium
