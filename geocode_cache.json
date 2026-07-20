@@ -1,2 +1,697 @@
-{}
-    
+{
+  "4294872": {
+    "lat": 44.3796688,
+    "lon": 9.1727234,
+    "approssimato": false
+  },
+  "4276597": {
+    "lat": 44.459843,
+    "lon": 8.9793481,
+    "approssimato": false
+  },
+  "4348204": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4319331": {
+    "lat": 44.3244584,
+    "lon": 9.356723,
+    "approssimato": false
+  },
+  "4353354": {
+    "lat": 44.406805,
+    "lon": 8.9565823,
+    "approssimato": false
+  },
+  "4353355": {
+    "lat": 44.406805,
+    "lon": 8.9565823,
+    "approssimato": false
+  },
+  "4353356": {
+    "lat": 44.406805,
+    "lon": 8.9565823,
+    "approssimato": false
+  },
+  "4353357": {
+    "lat": 44.406805,
+    "lon": 8.9565823,
+    "approssimato": false
+  },
+  "4353358": {
+    "lat": 44.406805,
+    "lon": 8.9565823,
+    "approssimato": false
+  },
+  "4342205": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4354251": {
+    "lat": 44.3367625,
+    "lon": 9.2669559,
+    "approssimato": true
+  },
+  "4263429": {
+    "lat": 44.5672235,
+    "lon": 8.9601403,
+    "approssimato": false
+  },
+  "4353164": {
+    "lat": 44.5145006,
+    "lon": 9.046503,
+    "approssimato": true
+  },
+  "4351950": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4319332": {
+    "lat": 44.2714066,
+    "lon": 9.4359164,
+    "approssimato": false
+  },
+  "4336793": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4326299": {
+    "lat": 44.4530949,
+    "lon": 9.0867813,
+    "approssimato": true
+  },
+  "4354236": {
+    "lat": 44.4153595,
+    "lon": 9.1945163,
+    "approssimato": false
+  },
+  "4293901": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4225146": {
+    "lat": 44.4199627,
+    "lon": 9.3888322,
+    "approssimato": true
+  },
+  "4319054": {
+    "lat": 44.3890475,
+    "lon": 9.1656396,
+    "approssimato": false
+  },
+  "4346784": {
+    "lat": 44.5195217,
+    "lon": 9.1591165,
+    "approssimato": true
+  },
+  "4353165": {
+    "lat": 44.5145006,
+    "lon": 9.046503,
+    "approssimato": true
+  },
+  "4263428": {
+    "lat": 44.5672235,
+    "lon": 8.9601403,
+    "approssimato": false
+  },
+  "4319330": {
+    "lat": 44.3244584,
+    "lon": 9.356723,
+    "approssimato": false
+  },
+  "4354260": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351867": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4316391": {
+    "lat": 44.54833,
+    "lon": 8.9156574,
+    "approssimato": true
+  },
+  "4335237": {
+    "lat": 44.5605766,
+    "lon": 9.0916029,
+    "approssimato": true
+  },
+  "4347315": {
+    "lat": 44.5044389,
+    "lon": 8.7079273,
+    "approssimato": false
+  },
+  "4344631": {
+    "lat": 44.4530949,
+    "lon": 9.0867813,
+    "approssimato": true
+  },
+  "4290037": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4332278": {
+    "lat": 44.553146,
+    "lon": 8.9796474,
+    "approssimato": false
+  },
+  "4326042": {
+    "lat": 44.3511373,
+    "lon": 9.1524917,
+    "approssimato": true
+  },
+  "4354102": {
+    "lat": 44.3913363,
+    "lon": 9.1563156,
+    "approssimato": true
+  },
+  "4355418": {
+    "lat": 44.4351506,
+    "lon": 9.0136105,
+    "approssimato": false
+  },
+  "4343483": {
+    "lat": 44.6012449,
+    "lon": 9.0386677,
+    "approssimato": true
+  },
+  "4312350": {
+    "lat": 44.7612365,
+    "lon": 8.8549664,
+    "approssimato": true
+  },
+  "4355970": {
+    "lat": 44.3998366,
+    "lon": 8.6781181,
+    "approssimato": false
+  },
+  "4354750": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336800": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4354244": {
+    "lat": 44.3373132,
+    "lon": 9.5363278,
+    "approssimato": true
+  },
+  "4326043": {
+    "lat": 44.3511373,
+    "lon": 9.1524917,
+    "approssimato": true
+  },
+  "4342907": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4339039": {
+    "lat": 44.5585195,
+    "lon": 8.6718526,
+    "approssimato": true
+  },
+  "4328023": {
+    "lat": 44.2740903,
+    "lon": 9.5146752,
+    "approssimato": true
+  },
+  "4350406": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351927": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4276596": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4341988": {
+    "lat": 44.4552306,
+    "lon": 8.8910586,
+    "approssimato": false
+  },
+  "4248708": {
+    "lat": 44.4820354,
+    "lon": 8.9474339,
+    "approssimato": true
+  },
+  "4338633": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4353580": {
+    "lat": 44.3341699,
+    "lon": 9.213041,
+    "approssimato": true
+  },
+  "4351858": {
+    "lat": 44.3506407,
+    "lon": 9.2309239,
+    "approssimato": true
+  },
+  "4272421": {
+    "lat": 44.4475498,
+    "lon": 8.7477687,
+    "approssimato": true
+  },
+  "4354263": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4352498": {
+    "lat": 44.4295224,
+    "lon": 8.9542679,
+    "approssimato": false
+  },
+  "4351443": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4355420": {
+    "lat": 44.4351506,
+    "lon": 9.0136105,
+    "approssimato": false
+  },
+  "4245721": {
+    "lat": 44.4297579,
+    "lon": 9.1823896,
+    "approssimato": false
+  },
+  "4355421": {
+    "lat": 44.4351506,
+    "lon": 9.0136105,
+    "approssimato": false
+  },
+  "4329634": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336795": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4353579": {
+    "lat": 44.3341699,
+    "lon": 9.213041,
+    "approssimato": true
+  },
+  "4351675": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4353585": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4350880": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336733": {
+    "lat": 44.2805681,
+    "lon": 9.6140131,
+    "approssimato": true
+  },
+  "4294871": {
+    "lat": 44.3913363,
+    "lon": 9.1563156,
+    "approssimato": true
+  },
+  "4351444": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4276591": {
+    "lat": 44.731969,
+    "lon": 8.6889222,
+    "approssimato": true
+  },
+  "4276592": {
+    "lat": 44.731969,
+    "lon": 8.6889222,
+    "approssimato": true
+  },
+  "4343392": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4319329": {
+    "lat": 44.3244584,
+    "lon": 9.356723,
+    "approssimato": false
+  },
+  "4355063": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4276590": {
+    "lat": 44.731969,
+    "lon": 8.6889222,
+    "approssimato": true
+  },
+  "4328809": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4338215": {
+    "lat": 44.5145306,
+    "lon": 8.9002135,
+    "approssimato": false
+  },
+  "4349587": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336792": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4353332": {
+    "lat": 44.4023274,
+    "lon": 9.1114029,
+    "approssimato": true
+  },
+  "4354920": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4354748": {
+    "lat": 44.5705401,
+    "lon": 8.955386,
+    "approssimato": false
+  },
+  "4354022": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336798": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4346935": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4313271": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4354818": {
+    "lat": 44.4672076,
+    "lon": 9.0906193,
+    "approssimato": true
+  },
+  "4354620": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4341078": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4355199": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4305271": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351633": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4352555": {
+    "lat": 44.4094472,
+    "lon": 8.9667612,
+    "approssimato": false
+  },
+  "4351951": {
+    "lat": 44.408017,
+    "lon": 8.6893365,
+    "approssimato": true
+  },
+  "4342908": {
+    "lat": 44.392966,
+    "lon": 8.6730786,
+    "approssimato": false
+  },
+  "4338216": {
+    "lat": 44.5145306,
+    "lon": 8.9002135,
+    "approssimato": false
+  },
+  "4332358": {
+    "lat": 44.4172374,
+    "lon": 8.9585049,
+    "approssimato": false
+  },
+  "4341321": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4355419": {
+    "lat": 44.4351506,
+    "lon": 9.0136105,
+    "approssimato": false
+  },
+  "4341954": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4342281": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351396": {
+    "lat": 44.4835627,
+    "lon": 8.968284,
+    "approssimato": false
+  },
+  "4352112": {
+    "lat": 44.4399695,
+    "lon": 8.9695152,
+    "approssimato": false
+  },
+  "4354413": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4337163": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4353858": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4353568": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4336796": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4353856": {
+    "lat": 44.3536822,
+    "lon": 9.2172134,
+    "approssimato": false
+  },
+  "4352102": {
+    "lat": 44.5188233,
+    "lon": 8.9516139,
+    "approssimato": true
+  },
+  "4248709": {
+    "lat": 44.4820354,
+    "lon": 8.9474339,
+    "approssimato": true
+  },
+  "4353781": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4287200": {
+    "lat": 44.4199627,
+    "lon": 9.3888322,
+    "approssimato": true
+  },
+  "4343636": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4345608": {
+    "lat": 44.3080019,
+    "lon": 9.3446925,
+    "approssimato": true
+  },
+  "4346223": {
+    "lat": 44.4467161,
+    "lon": 8.900664,
+    "approssimato": false
+  },
+  "4353578": {
+    "lat": 44.3341699,
+    "lon": 9.213041,
+    "approssimato": true
+  },
+  "4319328": {
+    "lat": 44.3244584,
+    "lon": 9.356723,
+    "approssimato": false
+  },
+  "4354030": {
+    "lat": 44.4530949,
+    "lon": 9.0867813,
+    "approssimato": true
+  },
+  "4351204": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4350405": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4350404": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4350403": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4352977": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351632": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4329368": {
+    "lat": 44.4375998,
+    "lon": 9.2147076,
+    "approssimato": true
+  },
+  "4329355": {
+    "lat": 44.4375998,
+    "lon": 9.2147076,
+    "approssimato": true
+  },
+  "4327604": {
+    "lat": 44.4375998,
+    "lon": 9.2147076,
+    "approssimato": true
+  },
+  "4354755": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4343582": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4338112": {
+    "lat": 44.3330809,
+    "lon": 9.3724611,
+    "approssimato": true
+  },
+  "4351442": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4351952": {
+    "lat": 44.408017,
+    "lon": 8.6893365,
+    "approssimato": true
+  },
+  "4169893": {
+    "lat": 44.5466232,
+    "lon": 9.4492369,
+    "approssimato": true
+  },
+  "4352831": {
+    "lat": 44.4091518,
+    "lon": 8.9361055,
+    "approssimato": false
+  },
+  "4342494": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4343393": {
+    "lat": 44.4872535,
+    "lon": 8.9098226,
+    "approssimato": false
+  },
+  "4337820": {
+    "lat": 44.5641434,
+    "lon": 8.9895956,
+    "approssimato": true
+  }
+}
