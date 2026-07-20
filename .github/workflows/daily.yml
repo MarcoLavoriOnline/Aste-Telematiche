@@ -7,6 +7,13 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch: {}   # permette anche di farlo partire manualmente col bottone "Run workflow"
 
+# Impedisce a due esecuzioni di girare in parallelo (es. uno scheduled e uno
+# manuale che si sovrappongono): la seconda aspetta che la prima finisca,
+# invece di generare conflitti quando entrambe provano a salvare gli stessi file.
+concurrency:
+  group: scraping-aste-genova
+  cancel-in-progress: false
+
 permissions:
   contents: write   # serve per poter salvare i nuovi snapshot e la pagina dentro al repository
   issues: write      # serve per poter aprire la Issue di notifica
@@ -58,5 +65,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add snapshots/ docs/ geocode_cache.json
           git diff --staged --quiet || git commit -m "Aggiornamento aste $(date +'%Y-%m-%d')"
-          git pull --rebase origin main
+          git pull --no-rebase -X ours origin main
           git push
