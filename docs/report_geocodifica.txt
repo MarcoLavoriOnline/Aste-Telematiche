@@ -1,0 +1,9 @@
+Report geocodifica - generato il 2026-07-20T15:24:53.094695
+Totale annunci: 139
+Geocodificati con successo: 139
+Senza coordinate: 0
+(di cui falliti in QUESTO run, i restanti erano gia' falliti in run precedenti: 0)
+
+======================================================================
+ELENCO ANNUNCI SENZA COORDINATE:
+======================================================================
