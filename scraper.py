@@ -53,6 +53,12 @@ class Annuncio:
     stato: str
 
 
+def _current_page(page: Page) -> int:
+    testo = page.locator(".paginazione_pagina_di").first.inner_text()
+    m = re.search(r"Pagina (\d+) di", testo)
+    return int(m.group(1)) if m else 1
+
+
 def _total_pages_and_results(page: Page) -> tuple[int, int]:
     testo = page.locator(".paginazione_pagina_di").first.inner_text()
     m_pagine = re.search(r"Pagina \d+ di (\d+) pagine", testo)
@@ -200,21 +206,45 @@ def scrape_all(headless: bool = True, delay_seconds: float = 2.0) -> list[Annunc
             if pagina_corrente >= pagine_totali:
                 break
 
-            next_num = pagina_corrente + 1
-            selector_num = f"#ctl00_mainc_PrimaSel_lnk_btn_valore_{next_num}"
-            selector_succ = "#ctl00_mainc_PrimaSel_lnk_btn_valore_succ"
+            # La paginazione del sito usa una "finestra scorrevole": non tutti
+            # i numeri di pagina sono sempre presenti come pulsanti. Quindi,
+            # invece di assumere che esista il pulsante "pagina N+1", leggiamo
+            # dinamicamente quali pulsanti-numero sono disponibili ORA e
+            # clicchiamo il più piccolo tra quelli superiori alla pagina
+            # corrente. Se non c'e' nessun numero utile, usiamo il pulsante
+            # ">>" (id ...li_succ).
+            bottoni = page.locator("[id^='ctl00_mainc_PrimaSel_lnk_btn_valore_']")
+            n_bottoni = bottoni.count()
+
+            candidati = []  # lista di (numero_pagina, locator)
+            succ_locator = None
+            for i in range(n_bottoni):
+                b = bottoni.nth(i)
+                b_id = b.get_attribute("id") or ""
+                if b_id.endswith("_succ"):
+                    succ_locator = b
+                    continue
+                if b_id.endswith("_prec"):
+                    continue
+                testo_bottone = (b.inner_text() or "").strip()
+                if testo_bottone.isdigit():
+                    candidati.append((int(testo_bottone), b))
+
+            candidati_validi = [c for c in candidati if c[0] > pagina_corrente]
+            candidati_validi.sort(key=lambda c: c[0])
 
             clicked = False
-            if page.locator(selector_num).count() > 0:
-                page.locator(selector_num).click()
+            if candidati_validi:
+                candidati_validi[0][1].click()
                 clicked = True
-            elif page.locator(selector_succ).count() > 0:
-                page.locator(selector_succ).click()
+            elif succ_locator is not None:
+                succ_locator.click()
                 clicked = True
 
             if not clicked:
                 log.warning(
-                    f"Non trovo il bottone per la pagina {next_num}: mi fermo qui "
+                    f"Nessun pulsante di paginazione utile trovato dopo la pagina "
+                    f"{pagina_corrente}: mi fermo qui "
                     f"(estratte {len(all_results)} su {risultati_totali} dichiarati)."
                 )
                 break
@@ -222,11 +252,40 @@ def scrape_all(headless: bool = True, delay_seconds: float = 2.0) -> list[Annunc
             page.wait_for_load_state("networkidle", timeout=30000)
             time.sleep(delay_seconds)
 
-            pagina_corrente += 1
+            # Non assumiamo che sia "pagina_corrente + 1": rileggiamo dal sito
+            # quale pagina abbiamo effettivamente raggiunto.
+            nuova_pagina = _current_page(page)
+            if nuova_pagina <= pagina_corrente:
+                log.warning(
+                    f"Dopo il click la pagina dichiarata dal sito ({nuova_pagina}) "
+                    f"non e' avanzata rispetto a prima ({pagina_corrente}): mi fermo "
+                    f"per evitare un ciclo infinito."
+                )
+                break
+            pagina_corrente = nuova_pagina
 
         browser.close()
 
     log.info(f"Totale estratto: {len(all_results)} (dichiarato dal sito: {risultati_totali})")
+
+    # Rete di sicurezza: se per qualche motivo una pagina fosse stata letta
+    # due volte, deduplichiamo per codice_asta (che dovrebbe essere univoco).
+    visti = set()
+    risultati_unici = []
+    for a in all_results:
+        chiave = a.codice_asta or a.link  # fallback se codice_asta manca
+        if chiave in visti:
+            continue
+        visti.add(chiave)
+        risultati_unici.append(a)
+
+    if len(risultati_unici) != len(all_results):
+        log.info(
+            f"Rimossi {len(all_results) - len(risultati_unici)} duplicati "
+            f"(probabile doppia lettura di una pagina)."
+        )
+
+    return risultati_unici
     return all_results
 
 
