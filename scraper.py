@@ -26,6 +26,7 @@ from pathlib import Path
 from typing import Optional
 
 from playwright.sync_api import sync_playwright, Page
+from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.tribunale.genova.it/venditegiudiziarie/default.aspx?m=1"
 
@@ -69,68 +70,74 @@ def _total_pages_and_results(page: Page) -> tuple[int, int]:
 
 
 def _parse_current_page(page: Page) -> list[Annuncio]:
-    """Estrae gli annunci dalla pagina attualmente renderizzata nel browser."""
-    panels = page.locator(".lib-panel")
-    count = panels.count()
+    """
+    Estrae gli annunci dalla pagina attualmente renderizzata nel browser.
+
+    Nota tecnica: invece di usare i locator/inner_text di Playwright per
+    separare indirizzo e comune (che sono su elementi <em> inline, quindi
+    Playwright li restituisce come UNA riga sola, senza un vero "a capo"
+    utilizzabile per separarli), prendiamo l'HTML grezzo di ogni pannello
+    e lo interpretiamo con BeautifulSoup, che invece riesce a distinguere
+    i due pezzi di testo separati dai tag <em> (get_text con separatore).
+    Questo e' lo stesso approccio, gia' validato, usato nella primissima
+    versione dello scraper (basata su requests).
+    """
+    panels_html = page.locator(".lib-panel").evaluate_all(
+        "elements => elements.map(el => el.outerHTML)"
+    )
     results = []
 
-    for i in range(count):
-        panel = panels.nth(i)
+    for panel_html in panels_html:
         try:
-            titolo = panel.locator(".lib-header").first.inner_text().strip()
+            panel = BeautifulSoup(panel_html, "lxml")
 
-            desc_rows = panel.locator(".lib-row.lib-desc")
+            titolo_tag = panel.find(class_="lib-header")
+            titolo = titolo_tag.get_text(strip=True) if titolo_tag else ""
+
+            desc_rows = panel.find_all(class_="lib-desc")
             indirizzo, comune, descrizione = "", "", ""
-            if desc_rows.count() > 0:
-                loc_text = desc_rows.nth(0).inner_text()
-                parts = [p.strip() for p in loc_text.split("\n") if p.strip()]
-                if len(parts) > 0:
-                    indirizzo = parts[0]
-                if len(parts) > 1:
-                    comune = parts[1]
-            if desc_rows.count() > 1:
-                descrizione = desc_rows.nth(1).inner_text().strip()
+            if desc_rows:
+                loc_p = desc_rows[0].find("p")
+                if loc_p:
+                    spans = loc_p.get_text("|", strip=True).split("|")
+                    indirizzo = spans[0].strip() if len(spans) > 0 else ""
+                    comune = spans[1].strip() if len(spans) > 1 else ""
+            if len(desc_rows) > 1:
+                descrizione = desc_rows[1].get_text(strip=True)
 
-            bg_text = ""
-            bg_loc = panel.locator(".lib-bg")
-            if bg_loc.count() > 0:
-                bg_text = bg_loc.first.inner_text()
-            bg_text = " ".join(bg_text.split())
-
+            bg = panel.find(class_="lib-bg")
             categoria = ruolo = tipo_vendita = lotto = codice_asta = ""
             anno = None
-            parts = [p.strip() for p in bg_text.split("|")]
-            for p in parts:
-                if p.startswith("Ruolo:"):
-                    ruolo_full = p.replace("Ruolo:", "").strip()
-                    if "/" in ruolo_full:
-                        ruolo, anno = ruolo_full.split("/", 1)
-                    else:
-                        ruolo = ruolo_full
-                elif p.startswith("Vendita:"):
-                    tipo_vendita = p.replace("Vendita:", "").strip()
-                elif p.startswith("Lotto:"):
-                    lotto = p.replace("Lotto:", "").strip()
-                elif p.startswith("Codice Asta:"):
-                    codice_asta = p.replace("Codice Asta:", "").strip()
-            if parts:
-                categoria = parts[0]
+            if bg:
+                bg_text = " ".join(bg.get_text(" ", strip=True).split())
+                parts = [p.strip() for p in bg_text.split("|")]
+                for p in parts:
+                    if p.startswith("Ruolo:"):
+                        ruolo_full = p.replace("Ruolo:", "").strip()
+                        if "/" in ruolo_full:
+                            ruolo, anno = ruolo_full.split("/", 1)
+                        else:
+                            ruolo = ruolo_full
+                    elif p.startswith("Vendita:"):
+                        tipo_vendita = p.replace("Vendita:", "").strip()
+                    elif p.startswith("Lotto:"):
+                        lotto = p.replace("Lotto:", "").strip()
+                    elif p.startswith("Codice Asta:"):
+                        codice_asta = p.replace("Codice Asta:", "").strip()
+                if parts:
+                    categoria = parts[0]
 
-            prezzo_base = ""
-            prezzo_loc = panel.locator(".price")
-            if prezzo_loc.count() > 0:
-                prezzo_base = prezzo_loc.first.inner_text().strip()
+            prezzo_tag = panel.find(class_="price")
+            prezzo_base = prezzo_tag.get_text(strip=True) if prezzo_tag else ""
 
             stato = "sconosciuto"
-            if panel.locator(".sfondo_green").count() > 0:
+            if panel.find(class_="sfondo_green"):
                 stato = "gara da iniziare"
-            elif panel.locator(".sfondo_red").count() > 0:
+            elif panel.find(class_="sfondo_red"):
                 stato = "in corso o conclusa"
 
-            link = ""
-            link_loc = panel.locator("a.lib-button")
-            if link_loc.count() > 0:
-                link = link_loc.first.get_attribute("href") or ""
+            link_tag = panel.find("a", class_="lib-button")
+            link = link_tag["href"] if link_tag and link_tag.has_attr("href") else ""
 
             results.append(Annuncio(
                 codice_asta=codice_asta,
@@ -148,7 +155,7 @@ def _parse_current_page(page: Page) -> list[Annuncio]:
                 stato=stato,
             ))
         except Exception as e:
-            log.warning(f"Errore parsing annuncio #{i}: {e}")
+            log.warning(f"Errore parsing di un annuncio: {e}")
             continue
 
     return results
