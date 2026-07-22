@@ -693,5 +693,45 @@
     "lat": 44.5641434,
     "lon": 8.9895956,
     "approssimato": true
+  },
+  "4285993": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4285967": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4285976": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4285977": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4285978": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4285964": {
+    "lat": 44.4546313,
+    "lon": 8.9826931,
+    "approssimato": false
+  },
+  "4341506": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
+  },
+  "4355992": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
   }
 }
