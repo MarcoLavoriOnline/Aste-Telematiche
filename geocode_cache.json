@@ -928,5 +928,15 @@
     "lat": 44.3760527,
     "lon": 9.5926994,
     "approssimato": true
+  },
+  "4350525": {
+    "lat": 44.5195217,
+    "lon": 9.1591165,
+    "approssimato": true
+  },
+  "4357141": {
+    "lat": 44.4086429,
+    "lon": 8.9318502,
+    "approssimato": true
   }
 }
