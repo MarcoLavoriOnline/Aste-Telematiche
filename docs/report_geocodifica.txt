@@ -1,4 +1,4 @@
-Report geocodifica - generato il 2026-08-16T06:39:28.414810
+Report geocodifica - generato il 2026-08-17T06:55:17.556729
 Totale annunci: 124
 Geocodificati con successo: 124
 Senza coordinate: 0
