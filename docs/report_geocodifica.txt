@@ -1,6 +1,6 @@
-Report geocodifica - generato il 2026-09-27T11:31:57.588665
-Totale annunci: 171
-Geocodificati con successo: 171
+Report geocodifica - generato il 2026-09-28T13:05:44.280260
+Totale annunci: 180
+Geocodificati con successo: 180
 Senza coordinate: 0
 (di cui falliti in QUESTO run, i restanti erano gia' falliti in run precedenti: 0)
 
