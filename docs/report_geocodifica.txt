@@ -1,12 +1,9 @@
-Report geocodifica - generato il 2026-11-05T14:07:05.997155
-Totale annunci: 148
-Geocodificati con successo: 147
-Senza coordinate: 1
-(di cui falliti in QUESTO run, i restanti erano gia' falliti in run precedenti: 1)
+Report geocodifica - generato il 2026-11-06T13:49:50.390588
+Totale annunci: 144
+Geocodificati con successo: 144
+Senza coordinate: 0
+(di cui falliti in QUESTO run, i restanti erano gia' falliti in run precedenti: 0)
 
 ======================================================================
 ELENCO ANNUNCI SENZA COORDINATE:
 ======================================================================
-
-[4361335] MAGAZZINO
-    Indirizzo: 'Vico Carmagnola, 16123 Genova GE, Italia'  |  Comune: 'Genova (GE)'
